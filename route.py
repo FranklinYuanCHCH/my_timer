@@ -5,7 +5,7 @@ import sqlite3
 app = Flask(__name__)
 
 @app.route("/")
-def homepage():
+def calculator():
     return render_template("layout.html")
 
 @app.route("/about")
@@ -16,7 +16,7 @@ def about():
 def result(id):
     conn = sqlite3.connect("results.db")
     cur = conn.cursor()
-    cur.execute("SELECT * FROM Pizza WHERE PizzaID=?",(id,))
+    cur.execute("SELECT * FROM sessions WHERE =?",(id,))
     pizza = cur.fetchone()
     return render_template("pizza.html", pizza=pizza)
 
