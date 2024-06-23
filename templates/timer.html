@@ -1,4 +1,59 @@
-{%extends 'layout.html'%}
-{%block content%}
-{{result}}
-{%endblock%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rubik's Cube Timer</title>
+</head>
+<body>
+    <div class="timer" id="timer">0.000</div>
+
+    <script>
+        let startTime;
+        let elapsedTime = 0;
+        let running = false;
+        let timer;
+        const timerElement = document.getElementById('timer');
+
+        function updateTimer() {
+            const now = Date.now();
+            const diff = (now - startTime + elapsedTime) / 1000;
+            timerElement.textContent = diff.toFixed(3);
+        }
+
+        function startTimer() {
+            startTime = Date.now();
+            timer = setInterval(updateTimer, 10);
+            running = true;
+        }
+
+        function stopTimer() {
+            clearInterval(timer);
+            elapsedTime += Date.now() - startTime;
+            running = false;
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            elapsedTime = 0;
+            timerElement.textContent = '0.000';
+            running = false;
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'Space') {
+                event.preventDefault();
+                if (!running) {
+                    if (elapsedTime === 0) {
+                        startTimer();
+                    } else {
+                        resetTimer();
+                    }
+                } else {
+                    stopTimer();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
