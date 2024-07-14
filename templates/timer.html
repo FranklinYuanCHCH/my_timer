@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <!--
@@ -62,12 +63,17 @@
             padding: 20px 0;
             width: 258px;
         }
+        canvas {
+            border: 1px solid #000;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div id="scramble"></div>
     <button id="btn-refresh">SCRAMBLE</button>
     <div class="timer" id="timer">0.000</div>
+    <canvas id="cubeCanvas" width="300" height="300"></canvas>
 
     <script>
         // Cube scrambling functionality
@@ -117,6 +123,7 @@
                 return moves;
             }
         };
+
         function displayScramble() {
             cube.reset();
             var i, scramble = cube.scramble(), len = scramble.length, result = "";
@@ -124,7 +131,51 @@
                 result += scramble.slice(i, i + 5).join("&nbsp;") + " ";
             }
             document.getElementById("scramble").innerHTML = result;
+            drawCube();
         }
+
+        function drawCube() {
+            const canvas = document.getElementById('cubeCanvas');
+            const ctx = canvas.getContext('2d');
+            const colors = {
+                y: 'yellow',
+                o: 'orange',
+                b: 'blue',
+                w: 'white',
+                r: 'red',
+                g: 'green'
+            };
+            const size = 50;
+            const initialState = cube.states[0];
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const positions = {
+                'U': { x: 150, y: 0 },
+                'L': { x: 0, y: 150 },
+                'F': { x: 150, y: 150 },
+                'R': { x: 300, y: 150 },
+                'B': { x: 450, y: 150 },
+                'D': { x: 150, y: 300 }
+            };
+
+            function drawFace(state, face, x, y) {
+                for (let i = 0; i < 3; i++) {
+                    for (let j = 0; j < 3; j++) {
+                        ctx.fillStyle = colors[state[i * 3 + j]];
+                        ctx.fillRect(x + j * size, y + i * size, size, size);
+                        ctx.strokeRect(x + j * size, y + i * size, size, size);
+                    }
+                }
+            }
+
+            for (let face in positions) {
+                const position = positions[face];
+                const statePart = initialState.slice(cube.faces.indexOf(face) * 9, cube.faces.indexOf(face) * 9 + 9);
+                drawFace(statePart, face, position.x, position.y);
+            }
+        }
+
         displayScramble();
         document.getElementById("btn-refresh").addEventListener("click", displayScramble);
 
@@ -159,6 +210,7 @@
             elapsedTime = 0;
             timerElement.textContent = '0.000';
             running = false;
+            displayScramble(); // Change scramble on reset
         }
 
         function saveTime(time) {
@@ -194,4 +246,4 @@
         });
     </script>
 </body>
-</html>
+</
