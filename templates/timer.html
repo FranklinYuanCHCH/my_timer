@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <!--
@@ -30,6 +29,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rubik's Cube Timer</title>
+    <script src="https://cdn.cubing.net/js/scramble-display" type="module"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -46,37 +46,19 @@
             margin: 20px;
         }
         #scramble {
-            font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+            font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
             font-size: 30px;
             line-height: 60px;
             margin-bottom: 30px;
-        }
-        #btn-refresh {
-            background-color: #428bca;
-            border: 1px solid #357ebd;
-            border-radius: 5px;
-            color: #fff;
-            cursor: pointer;
-            font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
-            font-size: 26px;
-            line-height: 26px;
-            padding: 20px 0;
-            width: 258px;
-        }
-        canvas {
-            border: 1px solid #000;
-            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div id="scramble"></div>
-    <button id="btn-refresh">SCRAMBLE</button>
+    <scramble-display id="scramble-display"></scramble-display>
     <div class="timer" id="timer">0.000</div>
-    <canvas id="cubeCanvas" width="300" height="300"></canvas>
 
     <script>
-        // Cube scrambling functionality
         var cube = {
             faces: "DLBURF",
             states: [],
@@ -126,58 +108,13 @@
 
         function displayScramble() {
             cube.reset();
-            var i, scramble = cube.scramble(), len = scramble.length, result = "";
-            for (i = 0; i < len; i += 5) {
-                result += scramble.slice(i, i + 5).join("&nbsp;") + " ";
-            }
-            document.getElementById("scramble").innerHTML = result;
-            drawCube();
-        }
-
-        function drawCube() {
-            const canvas = document.getElementById('cubeCanvas');
-            const ctx = canvas.getContext('2d');
-            const colors = {
-                y: 'yellow',
-                o: 'orange',
-                b: 'blue',
-                w: 'white',
-                r: 'red',
-                g: 'green'
-            };
-            const size = 50;
-            const initialState = cube.states[0];
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            const positions = {
-                'U': { x: 150, y: 0 },
-                'L': { x: 0, y: 150 },
-                'F': { x: 150, y: 150 },
-                'R': { x: 300, y: 150 },
-                'B': { x: 450, y: 150 },
-                'D': { x: 150, y: 300 }
-            };
-
-            function drawFace(state, face, x, y) {
-                for (let i = 0; i < 3; i++) {
-                    for (let j = 0; j < 3; j++) {
-                        ctx.fillStyle = colors[state[i * 3 + j]];
-                        ctx.fillRect(x + j * size, y + i * size, size, size);
-                        ctx.strokeRect(x + j * size, y + i * size, size, size);
-                    }
-                }
-            }
-
-            for (let face in positions) {
-                const position = positions[face];
-                const statePart = initialState.slice(cube.faces.indexOf(face) * 9, cube.faces.indexOf(face) * 9 + 9);
-                drawFace(statePart, face, position.x, position.y);
-            }
+            var scramble = cube.scramble();
+            var scrambleString = scramble.join(" ");
+            document.getElementById("scramble").innerHTML = scrambleString;
+            document.getElementById("scramble-display").setAttribute("scramble", scrambleString);
         }
 
         displayScramble();
-        document.getElementById("btn-refresh").addEventListener("click", displayScramble);
 
         // Timer functionality
         let startTime;
@@ -202,7 +139,6 @@
             clearInterval(timer);
             elapsedTime += Date.now() - startTime;
             running = false;
-            saveTime(elapsedTime);
         }
 
         function resetTimer() {
@@ -210,27 +146,10 @@
             elapsedTime = 0;
             timerElement.textContent = '0.000';
             running = false;
-            displayScramble(); // Change scramble on reset
+            displayScramble();
         }
 
-        function saveTime(time) {
-            fetch('/save_time', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ time: Math.round(time / 1000) })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-        }
-
-        document.addEventListener('keydown', (event) => {
+        document.addEventListener('keyup', (event) => {
             if (event.code === 'Space') {
                 event.preventDefault();
                 if (!running) {
@@ -246,4 +165,4 @@
         });
     </script>
 </body>
-</
+</html>
