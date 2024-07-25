@@ -1,8 +1,20 @@
 body {
-    font-family:"Arial";
-    color:rgb(255, 255, 255);
-    background:rgb(192, 255, 192);
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
 }
-p {
-    color:red;
+.timer {
+    font-size: 48px;
+    margin: 20px;
+}
+#scramble {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-size: 30px;
+    line-height: 60px;
+    margin-bottom: 30px;
 }

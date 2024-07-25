@@ -30,34 +30,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rubik's Cube Timer</title>
     <script src="https://cdn.cubing.net/js/scramble-display" type="module"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-        .timer {
-            font-size: 48px;
-            margin: 20px;
-        }
-        #scramble {
-            font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-            font-size: 30px;
-            line-height: 60px;
-            margin-bottom: 30px;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <div id="scramble"></div>
     <scramble-display id="scramble-display"></scramble-display>
     <div class="timer" id="timer">0.000</div>
-
+    <p>Hint: Press and release the Space Bar to start, stop, and reset the timer.<br> Draw scramble may take a bit to load depending on your internet conditions.
+    </p>
     <script>
         var cube = {
             faces: "DLBURF",
