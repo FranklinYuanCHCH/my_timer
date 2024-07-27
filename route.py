@@ -17,7 +17,7 @@ def about():
 # def login():
 
 def connect_db():
-    return sqlite3.connect('database.db')
+    return sqlite3.connect('results.db')
 
 @app.route("/timer")
 def timer():
