@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>All Solve Times</h1>
+    <ul>
+        {% for solve in solves %}
+        <li>{{ (solve[1] / 1000) | round(3) }} s</li>
+        {% endfor %}
+    </ul>
+    <button id="deleteButton">Delete Most Recent Solve</button>
+    <button id="deleteAllButton">Delete All Solves</button>
+
+    <script>
+        document.getElementById("deleteButton").addEventListener("click", function() {
+            fetch("/delete_most_recent", { method: "POST" })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        alert("Failed to delete the most recent solve.");
+                    }
+                });
+        });
+
+        document.getElementById("deleteAllButton").addEventListener("click", function() {
+            fetch("/delete_all", { method: "POST" })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        alert("Failed to delete all solves.");
+                    }
+                });
+        });
+    </script>
+</body>
+</html>
