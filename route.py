@@ -26,7 +26,7 @@ def timer():
 @app.route("/save_time", methods=["POST"])
 def save_time():
     data = request.get_json()
-    solve_time = data["time"]
+    solve_time = data["time"]  # Time is already in milliseconds
     scramble = data["scramble"]
     penalty = 0  # Adjust as needed
     comment = ""
