@@ -83,6 +83,7 @@ function updateTimer() {
 }
 
 function startTimer() {
+
     startTime = Date.now();
     timer = setInterval(updateTimer, 10);
     running = true;
@@ -93,12 +94,8 @@ function stopTimer() {
     elapsedTime += Date.now() - startTime;
     running = false;
     saveTime(elapsedTime / 1000);
-}
-
-function resetTimer() {
     clearInterval(timer);
     elapsedTime = 0;
-    timerElement.textContent = '0.000';
     running = false;
     displayScramble();
 }
