@@ -91,7 +91,7 @@ def register():
         conn.commit()
         conn.close()
         
-        flash('You were successfully registered!')
+        flash('You were successfully registered!', 'success')
         return redirect(url_for('login'))
 
     return render_template('register.html')
@@ -110,17 +110,17 @@ def login():
 
         if user and password == user[1]:
             session['user_id'] = user[0]
-            flash('You were successfully logged in!')
+            flash('You were successfully logged in!', 'success')
             return redirect(url_for('timer'))
         else:
-            flash('Invalid credentials')
+            flash('Username or password is incorrect', 'danger')
 
     return render_template('login.html')
 
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
-    flash('You were successfully logged out!')
+    flash('You were successfully logged out!', 'success')
     return redirect(url_for('login'))
 
 if __name__ == "__main__":
