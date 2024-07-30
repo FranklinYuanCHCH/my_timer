@@ -135,11 +135,11 @@ def sessions():
     if request.method == 'POST':
         session_name = request.form['session_name']
         event = request.form['event']
-        c.execute("INSERT INTO Sessions (userID, event, isPinned) VALUES (?, ?, ?)",
-                  (user_id, event, 0))
+        c.execute("INSERT INTO Sessions (sessionName, event, isPinned, userID) VALUES (?, ?, ?, ?)",
+                  (session_name, event, 0, user_id))
         conn.commit()
 
-    c.execute("SELECT sesssionID, event, isPinned FROM Sessions WHERE userID = ?", (user_id,))
+    c.execute("SELECT sessionID, sessionName, event, isPinned FROM Sessions WHERE userID = ?", (user_id,))
     user_sessions = c.fetchall()
     conn.close()
 
