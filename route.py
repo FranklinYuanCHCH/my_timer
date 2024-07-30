@@ -111,7 +111,7 @@ def login():
         if user and password == user[1]:
             session['user_id'] = user[0]
             flash('You were successfully logged in!', 'success')
-            return redirect(url_for('timer'))
+            return redirect(url_for('sessions'))
         else:
             flash('Username or password is incorrect', 'danger')
 
@@ -122,6 +122,28 @@ def logout():
     session.pop('user_id', None)
     flash('You were successfully logged out!', 'success')
     return redirect(url_for('login'))
+
+@app.route('/sessions', methods=['GET', 'POST'])
+def sessions():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    user_id = session['user_id']
+    conn = connect_db()
+    c = conn.cursor()
+
+    if request.method == 'POST':
+        session_name = request.form['session_name']
+        event = request.form['event']
+        c.execute("INSERT INTO Sessions (userID, event, isPinned) VALUES (?, ?, ?)",
+                  (user_id, event, 0))
+        conn.commit()
+
+    c.execute("SELECT sesssionID, event, isPinned FROM Sessions WHERE userID = ?", (user_id,))
+    user_sessions = c.fetchall()
+    conn.close()
+
+    return render_template('sessions.html', sessions=user_sessions)
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
