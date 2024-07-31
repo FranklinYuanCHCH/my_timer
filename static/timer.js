@@ -5,6 +5,13 @@ let timer;
 const timerElement = document.getElementById('timer');
 let scrambleString = '';
 
+// Function to get session ID from the URL or another method
+function getSessionId() {
+    // Example: Assuming the session ID is passed via a data attribute in the HTML
+    const sessionIdElement = document.getElementById('session-id');
+    return sessionIdElement ? sessionIdElement.value : null;
+}
+
 const cube = {
     faces: "DLBURF",
     states: [],
@@ -74,6 +81,13 @@ function stopTimer() {
     displayScramble();
 }
 
+function resetTimer() {
+    clearInterval(timer);
+    elapsedTime = 0;
+    timerElement.textContent = "0.000";
+    running = false;
+}
+
 function displayScramble() {
     cube.reset();
     const scramble = cube.scramble();
@@ -83,6 +97,8 @@ function displayScramble() {
 }
 
 function saveTime(time) {
+    const sessionId = getSessionId();
+
     fetch("/save_time", {
         method: "POST",
         headers: {
@@ -90,7 +106,8 @@ function saveTime(time) {
         },
         body: JSON.stringify({ 
             time: Math.round(time * 1000), // Converting seconds to milliseconds
-            scramble: scrambleString 
+            scramble: scrambleString,
+            session_id: sessionId  // Include session_id
         })
     })
     .then(response => response.json())

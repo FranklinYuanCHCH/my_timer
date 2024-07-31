@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Details</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Session Solves</h1>
+    {% if solves %}
+        <ul>
+        {% for solve in solves %}
+            <li>{{ (solve[1] / 1000) | round(3) }} s - {{ solve[2] }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No solves recorded in this session.</p>
+    {% endif %}
+    <a href="{{ url_for('sessions') }}">Back to Sessions</a>
+</body>
+</html>

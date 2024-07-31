@@ -9,7 +9,7 @@
     {% if sessions %}
         <ul>
         {% for session in sessions %}
-            <li>{{ session[1] }}</li>
+            <li><a href="{{ url_for('view_session', session_id=session[0]) }}">{{ session[1] }}</a> (Event: {{ session[2] }})</li>
         {% endfor %}
         </ul>
     {% else %}

@@ -145,5 +145,18 @@ def sessions():
 
     return render_template('sessions.html', sessions=user_sessions)
 
+@app.route('/session/<int:session_id>')
+def view_session(session_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = connect_db()
+    c = conn.cursor()
+    c.execute("SELECT solveID, time, scramble FROM Solves WHERE sessionID = ?", (session_id,))
+    session_solves = c.fetchall()
+    conn.close()
+
+    return render_template('view_sessions.html', solves=session_solves)
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
