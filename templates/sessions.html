@@ -2,19 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sessions</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <h1>Sessions</h1>
+
     {% if sessions %}
         <ul>
-        {% for session in sessions %}
-            <li><a href="{{ url_for('view_session', session_id=session[0]) }}">{{ session[1] }}</a> (Event: {{ session[2] }})</li>
-        {% endfor %}
+            {% for session in sessions %}
+                <li>
+                    <form method="POST" action="{{ url_for('sessions') }}">
+                        <input type="hidden" name="session_id" value="{{ session[0] }}">
+                        <button type="submit">{{ session[1] }}</button> (Event: {{ session[2] }})
+                    </form>
+                </li>
+            {% endfor %}
         </ul>
     {% else %}
         <p>Your session folder is empty. Create one:</p>
     {% endif %}
+
+    <h2>Create a New Session</h2>
     <form method="POST" action="{{ url_for('sessions') }}">
         <label for="session_name">Session Name:</label>
         <input type="text" name="session_name" required>

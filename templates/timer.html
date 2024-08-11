@@ -15,6 +15,11 @@
     -->
 </head>
 <body>
+    {% if session['active_session_id'] %}
+        <p>Active Session: {{ session['active_session_id'] }}</p>
+    {% else %}
+        <p>No active session. Please select a session.</p>
+    {% endif %}
     <div id="scramble"></div>
     <scramble-display id="scramble-display"></scramble-display>
     <div class="timer" id="timer">0.000</div>
@@ -22,4 +27,5 @@
     </p>
     <script src="/static/timer.js"></script>
 </body>
+
 </html>

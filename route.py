@@ -24,8 +24,8 @@ def timer():
 
 @app.route("/save_time", methods=["POST"])
 def save_time():
-    if 'user_id' not in session:
-        return jsonify({"status": "error", "message": "Not logged in"}), 403
+    if 'user_id' not in session or 'active_session_id' not in session:
+        return jsonify({"status": "error", "message": "Not logged in or no active session"}), 403
 
     data = request.get_json()
     solve_time = data["time"]
@@ -33,11 +33,12 @@ def save_time():
     penalty = 0
     comment = ""
     date = int(time.time())
+    session_id = session['active_session_id']
 
     conn = connect_db()
     c = conn.cursor()
-    c.execute("INSERT INTO Solves (time, penalty, comment, date, scramble) VALUES (?, ?, ?, ?, ?)",
-              (solve_time, penalty, comment, date, scramble))
+    c.execute("INSERT INTO Solves (time, penalty, comment, date, scramble, sessionID) VALUES (?, ?, ?, ?, ?, ?)",
+              (solve_time, penalty, comment, date, scramble, session_id))
     conn.commit()
     conn.close()
 
@@ -90,7 +91,7 @@ def register():
         c.execute("INSERT INTO Users (userName, password) VALUES (?, ?)", (username, password))
         conn.commit()
         conn.close()
-        
+
         flash('You were successfully registered!', 'success')
         return redirect(url_for('login'))
 
@@ -139,6 +140,10 @@ def sessions():
                   (session_name, event, 0, user_id))
         conn.commit()
 
+    if request.method == 'POST' and 'session_id' in request.form:
+        session['active_session_id'] = request.form['session_id']
+        return redirect(url_for('timer'))
+
     c.execute("SELECT sessionID, sessionName, event, isPinned FROM Sessions WHERE userID = ?", (user_id,))
     user_sessions = c.fetchall()
     conn.close()
@@ -156,7 +161,12 @@ def view_session(session_id):
     session_solves = c.fetchall()
     conn.close()
 
-    return render_template('view_sessions.html', solves=session_solves)
+    return render_template('view_session.html', solves=session_solves)
+
+#Route for none-existing page
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
