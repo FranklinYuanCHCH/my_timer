@@ -15,7 +15,7 @@
                 <li>
                     <form method="POST" action="{{ url_for('sessions') }}">
                         <input type="hidden" name="session_id" value="{{ session[0] }}">
-                        <button type="submit">{{ session[1] }}</button> (Event: {{ session[2] }})
+                        <button type="submit">{{ session[1] }}</button>
                     </form>
                 </li>
             {% endfor %}
@@ -28,9 +28,6 @@
     <form method="POST" action="{{ url_for('sessions') }}">
         <label for="session_name">Session Name:</label>
         <input type="text" name="session_name" required>
-        <br>
-        <label for="event">Event:</label>
-        <input type="text" name="event" value="333" required>
         <br>
         <button type="submit">Create Session</button>
     </form>

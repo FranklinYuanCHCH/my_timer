@@ -30,55 +30,54 @@ def save_time():
     data = request.get_json()
     solve_time = data["time"]
     scramble = data["scramble"]
-    penalty = 0
-    comment = ""
     date = int(time.time())
     session_id = session['active_session_id']
 
     conn = connect_db()
     c = conn.cursor()
-    c.execute("INSERT INTO Solves (time, penalty, comment, date, scramble, sessionID) VALUES (?, ?, ?, ?, ?, ?)",
-              (solve_time, penalty, comment, date, scramble, session_id))
+    c.execute("INSERT INTO Solves (time, date, scramble, sessionID) VALUES (?, ?, ?, ?)",
+              (solve_time, date, scramble, session_id))
     conn.commit()
     conn.close()
 
     return jsonify({"status": "success"})
 
-@app.route('/results')
-def results():
-    if 'user_id' not in session:
+@app.route('/results', methods=['GET'])
+def session_results():
+    if 'user_id' not in session or 'active_session_id' not in session:
         return redirect(url_for('login'))
 
     conn = connect_db()
     c = conn.cursor()
-    c.execute("SELECT solveID, time FROM Solves ORDER BY solveID")
+    c.execute("SELECT solveID, time, scramble FROM Solves WHERE sessionID = ?", (session['active_session_id'],))
     solves = c.fetchall()
     conn.close()
+
     return render_template("results.html", solves=solves)
 
 @app.route('/delete_most_recent', methods=["POST"])
 def delete_most_recent():
-    if 'user_id' not in session:
+    if 'user_id' not in session or 'active_session_id' not in session:
         return redirect(url_for('login'))
 
     conn = connect_db()
     c = conn.cursor()
-    c.execute("DELETE FROM Solves WHERE solveID = (SELECT solveID FROM Solves ORDER BY solveID DESC LIMIT 1)")
+    c.execute("DELETE FROM Solves WHERE solveID = (SELECT solveID FROM Solves WHERE sessionID = ? ORDER BY solveID DESC LIMIT 1)", (session['active_session_id'],))
     conn.commit()
     conn.close()
-    return redirect(url_for('results'))
+    return redirect(url_for('session_results'))
 
 @app.route('/delete_all', methods=["POST"])
 def delete_all():
-    if 'user_id' not in session:
+    if 'user_id' not in session or 'active_session_id' not in session:
         return redirect(url_for('login'))
 
     conn = connect_db()
     c = conn.cursor()
-    c.execute("DELETE FROM Solves")
+    c.execute("DELETE FROM Solves WHERE sessionID = ?", (session['active_session_id'],))
     conn.commit()
     conn.close()
-    return redirect(url_for('results'))
+    return redirect(url_for('session_results'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -121,6 +120,7 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
+    session.pop('active_session_id', None)
     flash('You were successfully logged out!', 'success')
     return redirect(url_for('login'))
 
@@ -134,36 +134,22 @@ def sessions():
     c = conn.cursor()
 
     if request.method == 'POST':
-        session_name = request.form['session_name']
-        event = request.form['event']
-        c.execute("INSERT INTO Sessions (sessionName, event, isPinned, userID) VALUES (?, ?, ?, ?)",
-                  (session_name, event, 0, user_id))
-        conn.commit()
+        if 'session_name' in request.form:
+            session_name = request.form['session_name']
+            c.execute("INSERT INTO Sessions (sessionName, isPinned, userID) VALUES (?, ?, ?)",
+                      (session_name, 0, user_id))
+            conn.commit()
 
-    if request.method == 'POST' and 'session_id' in request.form:
-        session['active_session_id'] = request.form['session_id']
-        return redirect(url_for('timer'))
+        if 'session_id' in request.form:
+            session['active_session_id'] = request.form['session_id']
+            return redirect(url_for('timer'))
 
-    c.execute("SELECT sessionID, sessionName, event, isPinned FROM Sessions WHERE userID = ?", (user_id,))
+    c.execute("SELECT sessionID, sessionName, isPinned FROM Sessions WHERE userID = ?", (user_id,))
     user_sessions = c.fetchall()
     conn.close()
 
     return render_template('sessions.html', sessions=user_sessions)
 
-@app.route('/session/<int:session_id>')
-def view_session(session_id):
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-
-    conn = connect_db()
-    c = conn.cursor()
-    c.execute("SELECT solveID, time, scramble FROM Solves WHERE sessionID = ?", (session_id,))
-    session_solves = c.fetchall()
-    conn.close()
-
-    return render_template('view_session.html', solves=session_solves)
-
-#Route for none-existing page
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
