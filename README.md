@@ -4,6 +4,7 @@ This project is a Rubik's Cube timer that generates scrambles and records solve 
 
 ## Rubik's Cube Scrambler
 
+Copyright (c) 2014 Jonathan Robson <jnrbsn@gmail.com>
 This is a super simple Rubik's Cube scrambler written in JavaScript. It's meant to be fast, lightweight, run completely in your browser, and not be annoying to use on mobile devices. Read the comments in the code for details on how it works.
 
 Try it here: [Rubik's Cube Scrambler](http://jnrbsn.github.io/rubiks-cube-scrambler/)
