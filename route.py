@@ -90,6 +90,12 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        confirm_password = request.form['confirm_password']
+
+        # Check if passwords match
+        if password != confirm_password:
+            flash('Passwords do not match. Please try again.', 'danger')
+            return render_template('register.html')
 
         conn = connect_db()
         c = conn.cursor()
