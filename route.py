@@ -93,6 +93,17 @@ def register():
 
         conn = connect_db()
         c = conn.cursor()
+
+        # Check if username is already taken
+        c.execute("SELECT userID FROM Users WHERE userName = ?", (username,))
+        existing_user = c.fetchone()
+
+        if existing_user:
+            flash('Username is already taken. Please choose another one.', 'danger')
+            conn.close()
+            return render_template('register.html')
+
+        # If username is not taken, proceed with registration
         c.execute("INSERT INTO Users (userName, password) VALUES (?, ?)", (username, password))
         conn.commit()
         conn.close()
@@ -187,6 +198,45 @@ def set_active_session(session_id):
     # Set the active session ID in the session
     session['active_session_id'] = session_id
     return redirect(url_for('timer'))  # Redirect to the timer page
+
+@app.route('/dashboard')
+def dashboard():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    user_id = session['user_id']
+    conn = connect_db()
+    c = conn.cursor()
+    c.execute("SELECT userName FROM Users WHERE userID = ?", (user_id,))
+    user_info = c.fetchone()
+    conn.close()
+
+    return render_template('dashboard.html', user_info=user_info, user_id=user_id)
+
+@app.route('/delete_account', methods=['POST'])
+def delete_account():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    user_id = session['user_id']
+    conn = connect_db()
+    c = conn.cursor()
+
+    # Delete all solves for the user
+    c.execute("DELETE FROM Solves WHERE sessionID IN (SELECT sessionID FROM Sessions WHERE userID = ?)", (user_id,))
+    
+    # Delete all sessions for the user
+    c.execute("DELETE FROM Sessions WHERE userID = ?", (user_id,))
+    
+    # Delete the user account
+    c.execute("DELETE FROM Users WHERE userID = ?", (user_id,))
+    conn.commit()
+    conn.close()
+
+    # Log the user out after account deletion
+    session.pop('user_id', None)
+    flash('Your account has been deleted.', 'success')
+    return redirect(url_for('login'))
 
 # Route for non-existing page
 @app.errorhandler(404)

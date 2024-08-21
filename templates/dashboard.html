@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    {% include 'navbar.html' %}
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <p>User ID: {{ user_id }}</p>
+    {% if user_info %}
+        <p>Username: {{ user_info[0] }}</p>
+    {% else %}
+        <p>User information not found.</p>
+    {% endif %}
+    <form action="{{ url_for('delete_account') }}" method="post">
+        <button type="submit">Delete Account</button>
+    </form>
+    {% include 'footer.html' %}
+</body>
+</html>
