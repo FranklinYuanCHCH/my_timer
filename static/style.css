@@ -75,3 +75,36 @@ body {
     padding-bottom: 50px; /* Adjust this value based on your footer height */
     font-family: Arial, sans-serif; /* Optional: Set a default font for your site */
 }
+
+footer {
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid #dee2e6;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-left {
+    margin: 0;
+}
+
+.footer-right {
+    margin: 0;
+}
+
+.footer-right a {
+    color: #007bff;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.footer-right a:hover {
+    text-decoration: underline;
+}
