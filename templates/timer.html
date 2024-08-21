@@ -18,7 +18,7 @@
     {% include 'navbar.html' %}
     <main>
         {% if session['active_session_id'] %}
-            <p>Active Session: {{ session['active_session_id'] }}</p>
+            <p>Active Session: {{ active_session_name }}</p>
         {% else %}
             <p>No active session. Please select a session.</p>
         {% endif %}

@@ -20,7 +20,13 @@ def about():
 def timer():
     if 'user_id' not in session:
         return redirect(url_for('login'))
-    return render_template("timer.html")
+    
+    if 'active_session_name' not in session:
+        flash("No active session selected. Please select a session.", 'warning')
+        return redirect(url_for('sessions'))
+
+    active_session_name = session.get('active_session_name')
+    return render_template("timer.html", active_session_name=active_session_name)
 
 @app.route("/save_time", methods=["POST"])
 def save_time():
@@ -65,7 +71,7 @@ def results():
     solves = c.fetchall()
     conn.close()
 
-    return render_template("results.html", solves=solves)
+    return render_template("results.html", solves=solves, sort_by=sort_by)
 
 @app.route('/delete_most_recent', methods=["POST"])
 def delete_most_recent():
@@ -176,6 +182,7 @@ def sessions():
             # Remove the session from the active session
             if session.get('active_session_id') == int(delete_session_id):
                 session.pop('active_session_id', None)
+                session.pop('active_session_name', None)
 
     c.execute("SELECT sessionID, sessionName, isPinned FROM Sessions WHERE userID = ?", (user_id,))
     user_sessions = c.fetchall()
@@ -183,27 +190,25 @@ def sessions():
 
     return render_template('sessions.html', sessions=user_sessions)
 
-@app.route('/session/<int:session_id>')
-def view_session(session_id):
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-
-    conn = connect_db()
-    c = conn.cursor()
-    c.execute("SELECT solveID, time, scramble FROM Solves WHERE sessionID = ?", (session_id,))
-    session_solves = c.fetchall()
-    conn.close()
-
-    return render_template('view_session.html', solves=session_solves)
-
 @app.route('/set_active_session/<int:session_id>')
 def set_active_session(session_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
-    # Set the active session ID in the session
-    session['active_session_id'] = session_id
-    return redirect(url_for('timer'))  # Redirect to the timer page
+    conn = connect_db()
+    c = conn.cursor()
+    c.execute("SELECT sessionName FROM Sessions WHERE sessionID = ?", (session_id,))
+    session_data = c.fetchone()
+    
+    if session_data:
+        session['active_session_id'] = session_id
+        session['active_session_name'] = session_data[0]
+        flash(f"Active session set to {session_data[0]}", 'success')
+    else:
+        flash("Session not found", 'danger')
+    
+    conn.close()
+    return redirect(url_for('timer'))
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
@@ -272,10 +277,9 @@ def delete_account():
     conn.commit()
     conn.close()
 
-    # Log the user out after account deletion
-    session.pop('user_id', None)
-    flash('Your account has been deleted.', 'success')
-    return redirect(url_for('login'))
+    session.clear()
+    flash('Your account has been deleted', 'success')
+    return redirect(url_for('register'))
 
 # Route for non-existing page
 @app.errorhandler(404)
