@@ -90,26 +90,26 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        confirm_password = request.form['confirm_password']
+        password2 = request.form['password2']
 
-        if password != confirm_password:
-            flash('Passwords do not match.', 'danger')
+        if password != password2:
+            flash('Passwords do not match', 'danger')
             return render_template('register.html')
 
         conn = connect_db()
         c = conn.cursor()
-        c.execute("SELECT userID FROM Users WHERE userName = ?", (username,))
+        c.execute("SELECT userName FROM Users WHERE userName = ?", (username,))
         existing_user = c.fetchone()
+        
         if existing_user:
-            flash('Username is already taken.', 'danger')
-            return render_template('register.html')
-
-        c.execute("INSERT INTO Users (userName, password) VALUES (?, ?)", (username, password))
-        conn.commit()
+            flash('Username is already taken', 'danger')
+        else:
+            c.execute("INSERT INTO Users (userName, password) VALUES (?, ?)", (username, password))
+            conn.commit()
+            flash('You were successfully registered!', 'success')
+            return redirect(url_for('login'))
+        
         conn.close()
-
-        flash('You were successfully registered!', 'success')
-        return redirect(url_for('login'))
 
     return render_template('register.html')
 
@@ -199,7 +199,7 @@ def set_active_session(session_id):
     session['active_session_id'] = session_id
     return redirect(url_for('timer'))  # Redirect to the timer page
 
-@app.route('/dashboard')
+@app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
@@ -207,6 +207,39 @@ def dashboard():
     user_id = session['user_id']
     conn = connect_db()
     c = conn.cursor()
+
+    if request.method == 'POST':
+        if 'new_username' in request.form:
+            new_username = request.form['new_username']
+            
+            # Check if the new username already exists
+            c.execute("SELECT userName FROM Users WHERE userName = ?", (new_username,))
+            existing_user = c.fetchone()
+            
+            if existing_user:
+                flash('Username is already taken.', 'danger')
+            else:
+                c.execute("UPDATE Users SET userName = ? WHERE userID = ?", (new_username, user_id))
+                conn.commit()
+                flash('Username updated successfully', 'success')
+
+        if 'current_password' in request.form:
+            current_password = request.form['current_password']
+            new_password = request.form['new_password']
+            confirm_password = request.form['confirm_password']
+
+            c.execute("SELECT password FROM Users WHERE userID = ?", (user_id,))
+            stored_password = c.fetchone()[0]
+
+            if current_password != stored_password:
+                flash('Current password is incorrect', 'danger')
+            elif new_password != confirm_password:
+                flash('New passwords do not match', 'danger')
+            else:
+                c.execute("UPDATE Users SET password = ? WHERE userID = ?", (new_password, user_id))
+                conn.commit()
+                flash('Password updated successfully', 'success')
+
     c.execute("SELECT userName FROM Users WHERE userID = ?", (user_id,))
     user_info = c.fetchone()
     conn.close()

@@ -4,19 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    {% include 'navbar.html' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Dashboard</h1>
-    <p>User ID: {{ user_id }}</p>
-    {% if user_info %}
-        <p>Username: {{ user_info[0] }}</p>
-    {% else %}
-        <p>User information not found.</p>
-    {% endif %}
-    <form action="{{ url_for('delete_account') }}" method="post">
-        <button type="submit">Delete Account</button>
-    </form>
+    {% include 'navbar.html' %}
+
+    <main>
+        <h1>Dashboard</h1>
+        <p>Welcome, {{ user_info[0] }}!</p>
+
+        <!-- Display flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <section>
+            <h2>Change Username</h2>
+            <form action="{{ url_for('dashboard') }}" method="post">
+                <label for="new_username">New Username:</label>
+                <input type="text" id="new_username" name="new_username" required>
+                <button type="submit">Update Username</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Change Password</h2>
+            <form action="{{ url_for('dashboard') }}" method="post">
+                <label for="current_password">Current Password:</label>
+                <input type="password" id="current_password" name="current_password" required>
+                
+                <label for="new_password">New Password:</label>
+                <input type="password" id="new_password" name="new_password" required>
+                
+                <label for="confirm_password">Confirm New Password:</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+                
+                <button type="submit">Update Password</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Delete Account</h2>
+            <form action="{{ url_for('delete_account') }}" method="post">
+                <button type="submit">Delete My Account</button>
+            </form>
+        </section>
+    </main>
     {% include 'footer.html' %}
 </body>
 </html>
