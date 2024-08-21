@@ -47,11 +47,18 @@ def results():
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
+    if 'active_session_id' not in session:
+        flash('No active session selected.', 'warning')
+        return redirect(url_for('sessions'))
+
+    session_id = session['active_session_id']
+
     conn = connect_db()
     c = conn.cursor()
-    c.execute("SELECT solveID, time FROM Solves ORDER BY solveID")
+    c.execute("SELECT time, scramble FROM Solves WHERE sessionID = ? ORDER BY solveID", (session_id,))
     solves = c.fetchall()
     conn.close()
+
     return render_template("results.html", solves=solves)
 
 @app.route('/delete_most_recent', methods=["POST"])
