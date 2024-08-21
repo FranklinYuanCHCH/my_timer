@@ -18,3 +18,60 @@ body {
     line-height: 60px;
     margin-bottom: 30px;
 }
+/* Navbar styles */
+nav {
+    background-color: #333;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Ensures the navbar is on top of other content */
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+nav ul li {
+    float: left;
+}
+
+nav ul li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+    background-color: #111;
+}
+
+body {
+    padding-top: 50px; /* Adjust this value if your navbar height changes */
+}
+
+/* Footer styles */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Ensures the footer is on top of other content */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    padding-bottom: 50px; /* Adjust this value based on your footer height */
+    font-family: Arial, sans-serif; /* Optional: Set a default font for your site */
+}
