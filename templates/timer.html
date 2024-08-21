@@ -15,17 +15,21 @@
     -->
 </head>
 <body>
-    {% if session['active_session_id'] %}
-        <p>Active Session: {{ session['active_session_id'] }}</p>
-    {% else %}
-        <p>No active session. Please select a session.</p>
-    {% endif %}
-    <div id="scramble"></div>
-    <scramble-display id="scramble-display"></scramble-display>
-    <div class="timer" id="timer">0.000</div>
-    <p>Hint: Press and release the Space Bar to start, stop, and reset the timer.<br> Draw scramble may take a bit to load depending on your internet conditions.
-    </p>
-    <script src="/static/timer.js"></script>
+    {% include 'navbar.html' %}
+    <main>
+        {% if session['active_session_id'] %}
+            <p>Active Session: {{ session['active_session_id'] }}</p>
+        {% else %}
+            <p>No active session. Please select a session.</p>
+        {% endif %}
+        <div id="scramble"></div>
+        <scramble-display id="scramble-display"></scramble-display>
+        <div class="timer" id="timer">0.000</div>
+        <p>Hint: Press and release the Space Bar to start, stop, and reset the timer.<br> Draw scramble may take a bit to load depending on your internet conditions.
+        </p>
+        <script src="/static/timer.js"></script>
+    </main>
+    {% include 'footer.html' %}
 </body>
 
 </html>

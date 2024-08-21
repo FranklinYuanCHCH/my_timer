@@ -7,21 +7,25 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Session Solves</h1>
-    {% if solves %}
-        <ul>
-        {% for solve in solves %}
-            <li>{{ (solve[0] / 1000) | round(3) }} s - {{ solve[1] }}</li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No solves recorded in this session.</p>
-    {% endif %}
+    {% include 'navbar.html' %}
+    <main>
+        <h1>Session Solves</h1>
+        {% if solves %}
+            <ul>
+            {% for solve in solves %}
+                <li>{{ (solve[0] / 1000) | round(3) }} s - {{ solve[1] }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No solves recorded in this session.</p>
+        {% endif %}
+        
+        <button id="deleteButton">Delete Most Recent Solve</button>
+        <button id="deleteAllButton">Delete All Solves</button>
     
-    <button id="deleteButton">Delete Most Recent Solve</button>
-    <button id="deleteAllButton">Delete All Solves</button>
-
-    <a href="{{ url_for('sessions') }}">Back to Sessions</a>
+        <a href="{{ url_for('sessions') }}">Back to Sessions</a>
+    </main>
+    {% include 'footer.html' %}
 
     <script>
         document.getElementById("deleteButton").addEventListener("click", function() {

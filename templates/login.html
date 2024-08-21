@@ -5,23 +5,27 @@
     <title>Login</title>
 </head>
 <body>
-    <h1>Login</h1>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div style="color: red;">
-          {{ messages[-1][1] }} <!-- Display only the most recent message -->
-        </div>
-      {% endif %}
-    {% endwith %}
-    <form method="POST" action="{{ url_for('login') }}">
-        <label for="username">Username:</label>
-        <input type="text" name="username" required>
-        <br>
-        <label for="password">Password:</label>
-        <input type="password" name="password" required>
-        <br>
-        <button type="submit">Login</button>
-    </form>
-    <a href="{{ url_for('register') }}">Don't have an account? Register here.</a>
+  {% include 'navbar.html' %}
+    <main>  
+        <h1>Login</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div style="color: red;">
+              {{ messages[-1][1] }} <!-- Display only the most recent message -->
+            </div>
+          {% endif %}
+        {% endwith %}
+        <form method="POST" action="{{ url_for('login') }}">
+            <label for="username">Username:</label>
+            <input type="text" name="username" required>
+            <br>
+            <label for="password">Password:</label>
+            <input type="password" name="password" required>
+            <br>
+            <button type="submit">Login</button>
+        </form>
+        <a href="{{ url_for('register') }}">Don't have an account? Register here.</a>
+    </main>
+    {% include 'footer.html' %}
 </body>
 </html>
