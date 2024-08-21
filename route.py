@@ -52,10 +52,16 @@ def results():
         return redirect(url_for('sessions'))
 
     session_id = session['active_session_id']
+    sort_by = request.args.get('sort_by', 'date')  # Default to 'date'
 
     conn = connect_db()
     c = conn.cursor()
-    c.execute("SELECT time, scramble FROM Solves WHERE sessionID = ? ORDER BY solveID", (session_id,))
+
+    if sort_by == 'time':
+        c.execute("SELECT time, scramble FROM Solves WHERE sessionID = ? ORDER BY time", (session_id,))
+    else:  # Default to sorting by date
+        c.execute("SELECT time, scramble FROM Solves WHERE sessionID = ? ORDER BY date", (session_id,))
+
     solves = c.fetchall()
     conn.close()
 

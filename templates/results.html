@@ -10,6 +10,16 @@
     {% include 'navbar.html' %}
     <main>
         <h1>Session Solves</h1>
+        
+        <!-- Sorting Toggle -->
+        <div>
+            <label for="sort-by">Sort by:</label>
+            <select id="sort-by" onchange="changeSort()">
+                <option value="date" {% if request.args.get('sort_by') == 'date' %}selected{% endif %}>Date</option>
+                <option value="time" {% if request.args.get('sort_by') == 'time' %}selected{% endif %}>Time</option>
+            </select>
+        </div>
+        
         {% if solves %}
             <ul>
             {% for solve in solves %}
@@ -49,6 +59,11 @@
                     }
                 });
         });
+
+        function changeSort() {
+            const sortBy = document.getElementById('sort-by').value;
+            window.location.href = `/results?sort_by=${sortBy}`;
+        }
     </script>
 </body>
 </html>
