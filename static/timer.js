@@ -7,7 +7,6 @@ let scrambleString = '';
 
 // Function to get session ID from the URL or another method
 function getSessionId() {
-    // Example: Assuming the session ID is passed via a data attribute in the HTML
     const sessionIdElement = document.getElementById('session-id');
     return sessionIdElement ? sessionIdElement.value : null;
 }
@@ -73,9 +72,8 @@ function startTimer() {
 
 function stopTimer() {
     clearInterval(timer);
-    elapsedTime += Date.now() - startTime;
-    running = false;
-    saveTime(elapsedTime / 1000);
+    const displayedTime = parseFloat(timerElement.textContent);
+    saveTime(displayedTime);
     elapsedTime = 0;
     running = false;
     displayScramble();

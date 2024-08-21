@@ -92,24 +92,18 @@ def register():
         password = request.form['password']
         confirm_password = request.form['confirm_password']
 
-        # Check if passwords match
         if password != confirm_password:
-            flash('Passwords do not match. Please try again.', 'danger')
+            flash('Passwords do not match.', 'danger')
             return render_template('register.html')
 
         conn = connect_db()
         c = conn.cursor()
-
-        # Check if username is already taken
         c.execute("SELECT userID FROM Users WHERE userName = ?", (username,))
         existing_user = c.fetchone()
-
         if existing_user:
-            flash('Username is already taken. Please choose another one.', 'danger')
-            conn.close()
+            flash('Username is already taken.', 'danger')
             return render_template('register.html')
 
-        # If username is not taken, proceed with registration
         c.execute("INSERT INTO Users (userName, password) VALUES (?, ?)", (username, password))
         conn.commit()
         conn.close()
@@ -217,7 +211,7 @@ def dashboard():
     user_info = c.fetchone()
     conn.close()
 
-    return render_template('dashboard.html', user_info=user_info, user_id=user_id)
+    return render_template('dashboard.html', user_info=user_info)
 
 @app.route('/delete_account', methods=['POST'])
 def delete_account():
