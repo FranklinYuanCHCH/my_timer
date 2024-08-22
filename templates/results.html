@@ -15,15 +15,18 @@
         <div>
             <label for="sort-by">Sort by:</label>
             <select id="sort-by" onchange="changeSort()">
-                <option value="date" {% if request.args.get('sort_by') == 'date' %}selected{% endif %}>Date</option>
-                <option value="time" {% if request.args.get('sort_by') == 'time' %}selected{% endif %}>Time</option>
+                <option value="date" {% if sort_by == 'date' %}selected{% endif %}>Date</option>
+                <option value="time" {% if sort_by == 'time' %}selected{% endif %}>Time</option>
             </select>
         </div>
         
         {% if solves %}
             <ul>
             {% for solve in solves %}
-                <li>{{ (solve[0] / 1000) | round(3) }} s - {{ solve[1] }}</li>
+                <li>
+                    {{ (solve[1] / 1000) | round(3) }} s - {{ solve[2] }}
+                    <a href="{{ url_for('solve_stats', solve_id=solve[0]) }}">View Stats</a>
+                </li>
             {% endfor %}
             </ul>
         {% else %}

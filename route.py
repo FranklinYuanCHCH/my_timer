@@ -64,9 +64,9 @@ def results():
     c = conn.cursor()
 
     if sort_by == 'time':
-        c.execute("SELECT time, scramble FROM Solves WHERE sessionID = ? ORDER BY time", (session_id,))
+        c.execute("SELECT solveID, time, scramble FROM Solves WHERE sessionID = ? ORDER BY time", (session_id,))
     else:  # Default to sorting by date
-        c.execute("SELECT time, scramble FROM Solves WHERE sessionID = ? ORDER BY date", (session_id,))
+        c.execute("SELECT solveID, time, scramble FROM Solves WHERE sessionID = ? ORDER BY date", (session_id,))
 
     solves = c.fetchall()
     conn.close()
@@ -281,6 +281,24 @@ def delete_account():
     flash('Your account has been deleted', 'success')
     return redirect(url_for('register'))
 
+@app.route('/solve_stats/<int:solve_id>')
+def solve_stats(solve_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = connect_db()
+    c = conn.cursor()
+    c.execute("SELECT time, date, scramble FROM Solves WHERE solveID = ?", (solve_id,))
+    solve = c.fetchone()
+    conn.close()
+
+    if solve:
+        solve_time, solve_date, scramble = solve
+        solve_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(solve_date))
+        return render_template("solve_stats.html", solve_id=solve_id, time=solve_time, date=solve_date, scramble=scramble)
+    else:
+        return render_template('404.html'), 404
+    
 # Route for non-existing page
 @app.errorhandler(404)
 def page_not_found(e):
