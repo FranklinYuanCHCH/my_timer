@@ -175,6 +175,7 @@ def sessions():
                 c.execute("INSERT INTO Sessions (sessionName, isPinned, userID) VALUES (?, ?, ?)",
                           (session_name, 0, user_id))
                 conn.commit()
+                flash('Session created successfully.', 'success')
 
         elif 'delete_session_id' in request.form:
             delete_session_id = request.form['delete_session_id']
