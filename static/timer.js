@@ -118,9 +118,9 @@ function saveTime(time) {
     });
 }
 
-document.addEventListener('keyup', (event) => {
+document.addEventListener('keydown', (event) => {
     if (event.code === 'Space') {
-        event.preventDefault();
+        event.preventDefault(); // Prevents the default action (scrolling)
         if (!running) {
             if (elapsedTime === 0) {
                 startTimer();
