@@ -102,9 +102,9 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        password2 = request.form['password2']
+        confirm_password = request.form['confirm_password']
 
-        if password != password2:
+        if password != confirm_password:
             flash('Passwords do not match', 'danger')
             return render_template('register.html')
 
