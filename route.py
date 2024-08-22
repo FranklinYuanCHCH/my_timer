@@ -48,6 +48,27 @@ def save_time():
 
     return jsonify({"status": "success"})
 
+@app.route("/get_recent_solves")
+def get_recent_solves():
+    if 'user_id' not in session or 'active_session_id' not in session:
+        return jsonify({'solves': []})
+    
+    session_id = session['active_session_id']
+    
+    conn = connect_db()
+    c = conn.cursor()
+    c.execute("""
+        SELECT time FROM Solves
+        WHERE sessionID = ?
+        ORDER BY date DESC
+        LIMIT 5
+    """, (session_id,))
+    recent_solves = c.fetchall()
+    conn.close()
+
+    # Return data in JSON format
+    return jsonify({'solves': [{'time': solve[0]} for solve in recent_solves]})
+
 @app.route('/results')
 def results():
     if 'user_id' not in session:
