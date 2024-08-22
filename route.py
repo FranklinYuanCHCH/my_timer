@@ -100,49 +100,53 @@ def delete_all():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        confirm_password = request.form['confirm_password']
+        username = request.form['username'].strip()
+        password = request.form['password'].strip()
+        confirm_password = request.form['confirm_password'].strip()
 
-        if password != confirm_password:
+        if not username or not password or not confirm_password:
+            flash('All fields must be filled out.', 'danger')
+        elif password != confirm_password:
             flash('Passwords do not match', 'danger')
-            return render_template('register.html')
-
-        conn = connect_db()
-        c = conn.cursor()
-        c.execute("SELECT userName FROM Users WHERE userName = ?", (username,))
-        existing_user = c.fetchone()
-        
-        if existing_user:
-            flash('Username is already taken', 'danger')
         else:
-            c.execute("INSERT INTO Users (userName, password) VALUES (?, ?)", (username, password))
-            conn.commit()
-            flash('You were successfully registered!', 'success')
-            return redirect(url_for('login'))
-        
-        conn.close()
+            conn = connect_db()
+            c = conn.cursor()
+            c.execute("SELECT userName FROM Users WHERE userName = ?", (username,))
+            existing_user = c.fetchone()
+            
+            if existing_user:
+                flash('Username is already taken', 'danger')
+            else:
+                c.execute("INSERT INTO Users (userName, password) VALUES (?, ?)", (username, password))
+                conn.commit()
+                flash('You were successfully registered!', 'success')
+                conn.close()
+                return redirect(url_for('login'))
+            conn.close()
 
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+        username = request.form['username'].strip()
+        password = request.form['password'].strip()
 
-        conn = connect_db()
-        c = conn.cursor()
-        c.execute("SELECT userID, password FROM Users WHERE userName = ?", (username,))
-        user = c.fetchone()
-        conn.close()
-
-        if user and password == user[1]:
-            session['user_id'] = user[0]
-            flash('You were successfully logged in!', 'success')
-            return redirect(url_for('sessions'))
+        if not username or not password:
+            flash('Both fields must be filled out.', 'danger')
         else:
-            flash('Username or password is incorrect', 'danger')
+            conn = connect_db()
+            c = conn.cursor()
+            c.execute("SELECT userID, password FROM Users WHERE userName = ?", (username,))
+            user = c.fetchone()
+            conn.close()
+
+            if user and password == user[1]:
+                session['user_id'] = user[0]
+                flash('You were successfully logged in!', 'success')
+                return redirect(url_for('sessions'))
+            else:
+                flash('Username or password is incorrect', 'danger')
 
     return render_template('login.html')
 
@@ -163,10 +167,14 @@ def sessions():
 
     if request.method == 'POST':
         if 'session_name' in request.form:
-            session_name = request.form['session_name']
-            c.execute("INSERT INTO Sessions (sessionName, isPinned, userID) VALUES (?, ?, ?)",
-                      (session_name, 0, user_id))
-            conn.commit()
+            session_name = request.form['session_name'].strip()
+
+            if not session_name:
+                flash('Session name must not be blank.', 'danger')
+            else:
+                c.execute("INSERT INTO Sessions (sessionName, isPinned, userID) VALUES (?, ?, ?)",
+                          (session_name, 0, user_id))
+                conn.commit()
 
         elif 'delete_session_id' in request.form:
             delete_session_id = request.form['delete_session_id']
@@ -221,35 +229,49 @@ def dashboard():
 
     if request.method == 'POST':
         if 'new_username' in request.form:
-            new_username = request.form['new_username']
-            
-            # Check if the new username already exists
-            c.execute("SELECT userName FROM Users WHERE userName = ?", (new_username,))
-            existing_user = c.fetchone()
-            
-            if existing_user:
-                flash('Username is already taken.', 'danger')
+            new_username = request.form['new_username'].strip()
+
+            if not new_username:
+                flash('Username must not be blank.', 'danger')
             else:
-                c.execute("UPDATE Users SET userName = ? WHERE userID = ?", (new_username, user_id))
-                conn.commit()
-                flash('Username updated successfully', 'success')
+                # Check if the new username already exists
+                c.execute("SELECT userName FROM Users WHERE userName = ?", (new_username,))
+                existing_user = c.fetchone()
+                
+                if existing_user:
+                    flash('Username is already taken.', 'danger')
+                else:
+                    c.execute("UPDATE Users SET userName = ? WHERE userID = ?", (new_username, user_id))
+                    conn.commit()
+                    flash('Username updated successfully', 'success')
 
         if 'current_password' in request.form:
-            current_password = request.form['current_password']
-            new_password = request.form['new_password']
-            confirm_password = request.form['confirm_password']
+            current_password = request.form['current_password'].strip()
+            new_password = request.form['new_password'].strip()
+            confirm_password = request.form['confirm_password'].strip()
 
-            c.execute("SELECT password FROM Users WHERE userID = ?", (user_id,))
-            stored_password = c.fetchone()[0]
-
-            if current_password != stored_password:
-                flash('Current password is incorrect', 'danger')
-            elif new_password != confirm_password:
-                flash('New passwords do not match', 'danger')
+            if not current_password or not new_password or not confirm_password:
+                flash('All password fields must be filled out.', 'danger')
             else:
-                c.execute("UPDATE Users SET password = ? WHERE userID = ?", (new_password, user_id))
-                conn.commit()
-                flash('Password updated successfully', 'success')
+                # Fetch the stored password from the database
+                c.execute("SELECT password FROM Users WHERE userID = ?", (user_id,))
+                stored_password = c.fetchone()
+                
+                if not stored_password:
+                    flash('Error retrieving stored password.', 'danger')
+                else:
+                    stored_password = stored_password[0]
+
+                    if current_password != stored_password:
+                        flash('Current password is incorrect', 'danger')
+                    elif new_password != confirm_password:
+                        flash('New passwords do not match', 'danger')
+                    elif new_password == stored_password:
+                        flash('Your new password must be different from your current password', 'danger')
+                    else:
+                        c.execute("UPDATE Users SET password = ? WHERE userID = ?", (new_password, user_id))
+                        conn.commit()
+                        flash('Password updated successfully', 'success')
 
     c.execute("SELECT userName FROM Users WHERE userID = ?", (user_id,))
     user_info = c.fetchone()
