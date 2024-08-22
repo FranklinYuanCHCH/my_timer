@@ -12,10 +12,6 @@ def connect_db():
 def home():
     return render_template("index.html")
 
-@app.route("/about")
-def about():
-    return ":("
-
 @app.route("/timer")
 def timer():
     if 'user_id' not in session:

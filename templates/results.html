@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Session Results</title>
-    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     {% include 'navbar.html' %}
@@ -35,38 +34,21 @@
         
         <button id="deleteButton">Delete Most Recent Solve</button>
         <button id="deleteAllButton">Delete All Solves</button>
-    
-        <a href="{{ url_for('sessions') }}">Back to Sessions</a>
     </main>
     {% include 'footer.html' %}
-
     <script>
-        document.getElementById("deleteButton").addEventListener("click", function() {
-            fetch("/delete_most_recent", { method: "POST" })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.reload();
-                    } else {
-                        alert("Failed to delete the most recent solve.");
-                    }
-                });
-        });
-
-        document.getElementById("deleteAllButton").addEventListener("click", function() {
-            fetch("/delete_all", { method: "POST" })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.reload();
-                    } else {
-                        alert("Failed to delete all solves.");
-                    }
-                });
-        });
-
         function changeSort() {
-            const sortBy = document.getElementById('sort-by').value;
-            window.location.href = `/results?sort_by=${sortBy}`;
+            var sortBy = document.getElementById('sort-by').value;
+            window.location.href = '{{ url_for("results") }}?sort=' + sortBy;
         }
+        
+        document.getElementById('deleteButton').addEventListener('click', function() {
+            // Logic to delete the most recent solve
+        });
+
+        document.getElementById('deleteAllButton').addEventListener('click', function() {
+            // Logic to delete all solves
+        });
     </script>
 </body>
 </html>
