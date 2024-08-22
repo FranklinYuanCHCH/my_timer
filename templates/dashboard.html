@@ -28,7 +28,7 @@
             <h2>Change Username</h2>
             <form action="{{ url_for('dashboard') }}" method="post">
                 <label for="new_username">New Username:</label>
-                <input type="text" id="new_username" name="new_username" required>
+                <input type="text" id="new_username" name="new_username" required><br>
                 <button type="submit">Update Username</button>
             </form>
         </section>
@@ -37,13 +37,13 @@
             <h2>Change Password</h2>
             <form action="{{ url_for('dashboard') }}" method="post">
                 <label for="current_password">Current Password:</label>
-                <input type="password" id="current_password" name="current_password" required>
+                <input type="password" id="current_password" name="current_password" required><br>
                 
                 <label for="new_password">New Password:</label>
-                <input type="password" id="new_password" name="new_password" required>
+                <input type="password" id="new_password" name="new_password" required><br>
                 
                 <label for="confirm_password">Confirm New Password:</label>
-                <input type="password" id="confirm_password" name="confirm_password" required>
+                <input type="password" id="confirm_password" name="confirm_password" required><br>
                 
                 <button type="submit">Update Password</button>
             </form>
