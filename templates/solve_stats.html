@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solve Stats</title>
-    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     {% include 'navbar.html' %}
     <main>
-        <h1>Solve Stats</h1>
-
-        <p><strong>Solve ID:</strong> {{ solve_id }}</p>
-        <p><strong>Time:</strong> {{ (time / 1000) | round(3) }} s</p>
-        <p><strong>Date:</strong> {{ date }}</p>
-        <p><strong>Scramble:</strong> {{ scramble }}</p>
-
-        <a href="{{ url_for('results') }}">Back to Results</a>
+        {% if error_message %}
+            <h1>{{ error_message }}</h1>
+        {% else %}
+            <h1>Solve Stats</h1>
+            <p><strong>Time:</strong> {{ time/1000 | round(3) }} s</p>
+            <p><strong>Date:</strong> {{ date }}</p>
+            <p><strong>Scramble:</strong> {{ scramble }}</p>
+            <a href="{{ url_for('results') }}">Back to Results</a>
+        {% endif %}
     </main>
     {% include 'footer.html' %}
 </body>

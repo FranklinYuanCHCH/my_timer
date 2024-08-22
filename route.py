@@ -286,16 +286,28 @@ def solve_stats(solve_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
+    user_id = session['user_id']
     conn = connect_db()
     c = conn.cursor()
-    c.execute("SELECT time, date, scramble FROM Solves WHERE solveID = ?", (solve_id,))
+
+    # Fetch solve and associated sessionID
+    c.execute("SELECT time, date, scramble, sessionID FROM Solves WHERE solveID = ?", (solve_id,))
     solve = c.fetchone()
-    conn.close()
 
     if solve:
-        solve_time, solve_date, scramble = solve
-        solve_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(solve_date))
-        return render_template("solve_stats.html", solve_id=solve_id, time=solve_time, date=solve_date, scramble=scramble)
+        solve_time, solve_date, scramble, session_id = solve
+
+        # Check if the sessionID is in the user's sessions
+        c.execute("SELECT sessionID FROM Sessions WHERE userID = ?", (user_id,))
+        user_sessions = c.fetchall()
+        user_session_ids = {session[0] for session in user_sessions}
+
+        if session_id in user_session_ids:
+            solve_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(solve_date))
+            return render_template("solve_stats.html", solve_id=solve_id, time=solve_time, date=solve_date, scramble=scramble)
+        else:
+            return render_template('solve_stats.html', error_message="Sorry, you can't access this solve.")
+
     else:
         return render_template('404.html'), 404
     
