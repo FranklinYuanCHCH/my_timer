@@ -50,10 +50,7 @@ nav ul li a {
 
 nav ul li a:hover {
     background-color: #111;
-}
 
-body {
-    padding-top: 50px; /* Adjust this value if your navbar height changes */
 }
 
 /* Footer styles */
@@ -74,6 +71,7 @@ body {
     padding: 0;
     padding-bottom: 50px; /* Adjust this value based on your footer height */
     font-family: Arial, sans-serif; /* Optional: Set a default font for your site */
+    overflow: hidden; /* Prevents scrolling */
 }
 
 footer {
@@ -92,10 +90,6 @@ footer {
 }
 
 .footer-left {
-    margin: 0;
-}
-
-.footer-right {
     margin: 0;
 }
 
