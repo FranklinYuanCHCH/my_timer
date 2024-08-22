@@ -4,6 +4,7 @@ let running = false;
 let timer;
 const timerElement = document.getElementById('timer');
 let scrambleString = '';
+let ignoreNextKeyUp = false;
 
 // Function to get session ID from the URL or another method
 function getSessionId() {
@@ -121,14 +122,28 @@ function saveTime(time) {
 document.addEventListener('keydown', (event) => {
     if (event.code === 'Space') {
         event.preventDefault(); // Prevents the default action (scrolling)
-        if (!running) {
-            if (elapsedTime === 0) {
-                startTimer();
-            } else {
-                resetTimer();
-            }
-        } else {
+        if (running) {
+            // Stop the timer and generate a new scramble when the space bar is pressed
             stopTimer();
+            ignoreNextKeyUp = true;
+        }
+    }
+});
+
+document.addEventListener('keyup', (event) => {
+    if (event.code === 'Space') {
+        event.preventDefault(); // Prevents the default action (scrolling)
+        if (ignoreNextKeyUp) {
+            // Ignore the next key up event if it was just used to stop the timer
+            ignoreNextKeyUp = false;
+            return;
+        }
+        if (!running) {
+            // Start the timer when the space bar is released
+            startTimer();
+        } else {
+            // Reset the timer if it's not running and the space bar is released
+            resetTimer();
         }
     }
 });

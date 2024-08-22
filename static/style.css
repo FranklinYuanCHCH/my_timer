@@ -101,3 +101,19 @@ footer {
 .footer-right a:hover {
     text-decoration: underline;
 }
+
+.flash.danger {
+    color: red;
+    background-color: #fdd;
+    padding: 10px;
+    border: 1px solid red;
+    border-radius: 5px;
+}
+
+.flash.success {
+    color: green;
+    background-color: #dff0d8;
+    padding: 10px;
+    border: 1px solid green;
+    border-radius: 5px;
+}
