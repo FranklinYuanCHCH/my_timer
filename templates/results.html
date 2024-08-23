@@ -10,7 +10,8 @@
     {% include 'navbar.html' %}
     <main>
         <h1>Session Solves</h1>
-        
+        <button id="deleteButton" onclick="return confirm('Are you sure you want to delete your most recent solve?');">Delete Most Recent Solve</button>
+        <button id="deleteAllButton" onclick="return confirm('Are you sure you want to delete all of the solves in this session? THIS CHANGE WILL BE IRREVERSIBLE');">Delete All Solves</button>
         <!-- Sorting Toggle -->
         <div>
             <label for="sort-by">Sort by:</label>
@@ -33,9 +34,6 @@
             <p>No solves recorded in this session.</p>
         {% endif %}
         
-        <button id="deleteButton">Delete Most Recent Solve</button>
-        <button id="deleteAllButton">Delete All Solves</button>
-    
         <a href="{{ url_for('sessions') }}">Back to Sessions</a>
     </main>
     {% include 'footer.html' %}
