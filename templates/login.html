@@ -10,8 +10,8 @@
         <h1>Login</h1>
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
-            <div>
-              <div class="flash {{ messages[-1][0] }}">{{ messages[-1][1] }}</div> <!-- Display only the most recent message -->
+            <div style="color: red;">
+              {{ messages[-1][1] }} <!-- Display only the most recent message -->
             </div>
           {% endif %}
         {% endwith %}

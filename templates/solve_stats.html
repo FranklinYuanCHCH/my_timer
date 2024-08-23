@@ -8,30 +8,15 @@
 <body>
     {% include 'navbar.html' %}
     <main>
-        <h1>Solve Stats</h1>
-        <table>
-            <tr>
-                <th>Solve ID</th>
-                <td>{{ solve_id }}</td>
-            </tr>
-            <tr>
-                <th>Scramble Algorithm</th>
-                <td>{{ scramble_algorithm }}</td>
-            </tr>
-            <tr>
-                <th>Displayed Scramble</th>
-                <td>{{ scramble_display }}</td>
-            </tr>
-            <tr>
-                <th>Time</th>
-                <td>{{ time }}</td>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <td>{{ date }}</td>
-            </tr>
-        </table>
-        <a href="{{ url_for('results') }}">Back to Results</a>
+        {% if error_message %}
+            <h1>{{ error_message }}</h1>
+        {% else %}
+            <h1>Solve Stats</h1>
+            <p><strong>Time:</strong> {{ time/1000 | round(3) }} s</p>
+            <p><strong>Date:</strong> {{ date }}</p>
+            <p><strong>Scramble:</strong> {{ scramble }}</p>
+            <a href="{{ url_for('results') }}">Back to Results</a>
+        {% endif %}
     </main>
     {% include 'footer.html' %}
 </body>
