@@ -10,7 +10,13 @@
     {% include 'navbar.html' %}
     <main>
         <h1>Sessions</h1>
-    
+        <h2>Create a New Session</h2>
+        <form method="POST" action="{{ url_for('sessions') }}">
+            <label for="session_name">Session Name:</label>
+            <input type="text" name="session_name" id="session_name" required>
+            <br>
+            <button type="submit">Create Session</button>
+        </form>
         {% if sessions %}
             <ul>
                 {% for session in sessions %}
@@ -43,13 +49,6 @@
             {% endif %}
         {% endwith %}
     
-        <h2>Create a New Session</h2>
-        <form method="POST" action="{{ url_for('sessions') }}">
-            <label for="session_name">Session Name:</label>
-            <input type="text" name="session_name" id="session_name" required>
-            <br>
-            <button type="submit">Create Session</button>
-        </form>
     </main>
     {% include 'footer.html' %}
 </body>
