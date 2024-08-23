@@ -35,11 +35,11 @@
         <p>Hint: Press and release the Space Bar to start, stop, and reset the timer.<br> Draw scramble may take a bit to load depending on your internet conditions.</p>
 
         <!-- Recent solves section -->
-        <h3>Recent Solves</h3>
+        <h3>Most Recent 5 Solves:</h3>
         <table id="solves-table">
             <thead>
                 <tr>
-                    <th>Time (s)</th>
+                    <th>Times:</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,32 +48,6 @@
         </table>
 
         <script src="/static/timer.js"></script>
-        <script>
-            function updateRecentSolves() {
-                fetch('/get_recent_solves')
-                    .then(response => response.json())
-                    .then(data => {
-                        const tableBody = document.querySelector('#solves-table tbody');
-                        tableBody.innerHTML = ''; // Clear existing rows
-                        data.solves.forEach(solve => {
-                            const row = document.createElement('tr');
-                            const timeCell = document.createElement('td');
-                            
-                            timeCell.textContent = (solve.time / 1000).toFixed(3); // Convert ms to s
-                            
-                            row.appendChild(timeCell);
-                            tableBody.appendChild(row);
-                        });
-                    })
-                    .catch(error => console.error('Error fetching recent solves:', error));
-            }
-
-            // Initial call to populate the solves table
-            updateRecentSolves();
-
-            // Update recent solves every 10 seconds
-            setInterval(updateRecentSolves, 1);
-        </script>
     </main>
     {% include 'footer.html' %}
 </body>

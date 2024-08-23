@@ -113,12 +113,40 @@ function saveTime(time) {
     .then(data => {
         if (data.status === "success") {
             console.log("Time saved successfully");
+            // Dispatch a custom event to update recent solves
+            const event = new Event('solveCompleted');
+            document.dispatchEvent(event);
         } else {
             console.log("Failed to save time");
         }
     });
 }
 
+function updateRecentSolves() {
+    fetch('/get_recent_solves')
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.querySelector('#solves-table tbody');
+            tableBody.innerHTML = ''; // Clear existing rows
+            data.solves.forEach(solve => {
+                const row = document.createElement('tr');
+                const timeCell = document.createElement('td');
+                
+                timeCell.textContent = (solve.time / 1000).toFixed(3); // Convert ms to s
+                
+                row.appendChild(timeCell);
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching recent solves:', error));
+}
+
+// Handle the solveCompleted event to update recent solves
+document.addEventListener('solveCompleted', function() {
+    updateRecentSolves();
+});
+
+// Add event listener for keydown events
 document.addEventListener('keydown', (event) => {
     if (event.code === 'Space') {
         event.preventDefault(); // Prevents the default action (scrolling)
@@ -130,6 +158,7 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
+// Add event listener for keyup events
 document.addEventListener('keyup', (event) => {
     if (event.code === 'Space') {
         event.preventDefault(); // Prevents the default action (scrolling)

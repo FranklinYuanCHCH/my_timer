@@ -14,11 +14,11 @@
             <li><a href="/sessions">Sessions</a></li>
             <li><a href="/results">Results</a></li>
             {% if 'user_id' in session %}
-                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                <li><a href="/logout">Logout</a></li>
                 <li><a href="/dashboard">Dashboard</a></li>
             {% else %}
-                <li><a href="{{ url_for('login') }}">Login</a></li>
-                <li><a href="{{ url_for('register') }}">Register</a></li>
+                <li><a href="/login">Login</a></li>
+                <li><a href="register">Register</a></li>
             {% endif %}
         </ul>
     </nav>
