@@ -67,7 +67,7 @@ function updateTimer() {
 
 function startTimer() {
     startTime = Date.now();
-    timer = setInterval(updateTimer, 10);
+    timer = setInterval(updateTimer, 1);
     running = true;
 }
 
