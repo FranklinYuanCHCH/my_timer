@@ -5,6 +5,7 @@ let timer;
 const timerElement = document.getElementById('timer');
 let scrambleString = '';
 let ignoreNextKeyUp = false;
+const recentSolves = []; // Array to store the last 5 solve times
 
 // Function to get session ID from the URL or another method
 function getSessionId() {
@@ -95,20 +96,6 @@ function displayScramble() {
     document.getElementById("scramble-display").setAttribute("scramble", scrambleString);
 }
 
-function updateAo5() {
-    fetch('/get_ao5')
-        .then(response => response.json())
-        .then(data => {
-            const ao5Element = document.getElementById('ao5');
-            if (data.ao5 !== null) {
-                ao5Element.textContent = (data.ao5 / 1000).toFixed(3); // Convert ms to s
-            } else {
-                ao5Element.textContent = 'Not enough data';
-            }
-        })
-        .catch(error => console.error('Error fetching AO5:', error));
-}
-
 function saveTime(time) {
     const sessionId = getSessionId();
 
@@ -127,19 +114,13 @@ function saveTime(time) {
     .then(data => {
         if (data.status === "success") {
             console.log("Time saved successfully");
-            // Dispatch a custom event to update recent solves and AO5
-            const event = new Event('solveCompleted');
-            document.dispatchEvent(event);
+            // Update recent solves
+            updateRecentSolves();
         } else {
             console.log("Failed to save time");
         }
     });
 }
-
-document.addEventListener('solveCompleted', function() {
-    updateRecentSolves();
-    updateAo5();
-});
 
 function updateRecentSolves() {
     fetch('/get_recent_solves')
@@ -147,7 +128,9 @@ function updateRecentSolves() {
         .then(data => {
             const tableBody = document.querySelector('#solves-table tbody');
             tableBody.innerHTML = ''; // Clear existing rows
+            recentSolves.length = 0; // Clear the array
             data.solves.forEach(solve => {
+                recentSolves.push(solve.time); // Store solve times in milliseconds
                 const row = document.createElement('tr');
                 const timeCell = document.createElement('td');
                 
@@ -156,8 +139,23 @@ function updateRecentSolves() {
                 row.appendChild(timeCell);
                 tableBody.appendChild(row);
             });
+            calculateAo5(); // Calculate Ao5 after updating solves
         })
         .catch(error => console.error('Error fetching recent solves:', error));
+}
+
+function calculateAo5() {
+    if (recentSolves.length < 5) return; // Ensure we have at least 5 solves
+
+    // Sort times and remove the fastest and slowest
+    const sortedTimes = recentSolves.slice().sort((a, b) => a - b);
+    sortedTimes.shift(); // Remove the fastest time
+    sortedTimes.pop();   // Remove the slowest time
+
+    // Calculate the average of the remaining three times
+    const average = sortedTimes.reduce((sum, time) => sum + time, 0) / sortedTimes.length;
+    const ao5Element = document.getElementById('ao5');
+    ao5Element.textContent = (average / 1000).toFixed(3); // Convert ms to s and display
 }
 
 // Handle the solveCompleted event to update recent solves
