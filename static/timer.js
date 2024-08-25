@@ -95,6 +95,20 @@ function displayScramble() {
     document.getElementById("scramble-display").setAttribute("scramble", scrambleString);
 }
 
+function updateAo5() {
+    fetch('/get_ao5')
+        .then(response => response.json())
+        .then(data => {
+            const ao5Element = document.getElementById('ao5');
+            if (data.ao5 !== null) {
+                ao5Element.textContent = (data.ao5 / 1000).toFixed(3); // Convert ms to s
+            } else {
+                ao5Element.textContent = 'Not enough data';
+            }
+        })
+        .catch(error => console.error('Error fetching AO5:', error));
+}
+
 function saveTime(time) {
     const sessionId = getSessionId();
 
@@ -113,7 +127,7 @@ function saveTime(time) {
     .then(data => {
         if (data.status === "success") {
             console.log("Time saved successfully");
-            // Dispatch a custom event to update recent solves
+            // Dispatch a custom event to update recent solves and AO5
             const event = new Event('solveCompleted');
             document.dispatchEvent(event);
         } else {
@@ -121,6 +135,11 @@ function saveTime(time) {
         }
     });
 }
+
+document.addEventListener('solveCompleted', function() {
+    updateRecentSolves();
+    updateAo5();
+});
 
 function updateRecentSolves() {
     fetch('/get_recent_solves')

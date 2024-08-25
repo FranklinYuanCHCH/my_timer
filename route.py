@@ -65,6 +65,32 @@ def get_recent_solves():
     # Return data in JSON format
     return jsonify({'solves': [{'time': solve[0]} for solve in recent_solves]})
 
+@app.route("/get_ao5")
+def get_ao5():
+    if 'user_id' not in session or 'active_session_id' not in session:
+        return jsonify({'ao5': None})
+    
+    session_id = session['active_session_id']
+    
+    conn = connect_db()
+    c = conn.cursor()
+    c.execute("""
+        SELECT time FROM Solves
+        WHERE sessionID = ?
+        ORDER BY date DESC
+        LIMIT 5
+    """, (session_id,))
+    recent_solves = c.fetchall()
+    conn.close()
+
+    # Calculate the average of the last 5 solves
+    if len(recent_solves) < 5:
+        return jsonify({'ao5': None})
+    
+    times = [solve[0] for solve in recent_solves]
+    ao5 = sum(times) / len(times)
+    return jsonify({'ao5': ao5})
+
 @app.route('/results')
 def results():
     if 'user_id' not in session:
