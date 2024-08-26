@@ -158,6 +158,10 @@ function calculateAo5() {
     ao5Element.textContent = (average / 1000).toFixed(3); // Convert ms to s and display
 }
 
+function initializePage() {
+    updateRecentSolves(); // Load recent solves and calculate AO5
+}
+
 // Handle the solveCompleted event to update recent solves
 document.addEventListener('solveCompleted', function() {
     updateRecentSolves();
@@ -195,3 +199,4 @@ document.addEventListener('keyup', (event) => {
 });
 
 displayScramble();
+initializePage(); // Initialize page with recent solves and AO5
