@@ -108,6 +108,10 @@ def results():
 
     if sort_by == 'time':
         c.execute("SELECT solveID, time, scramble FROM Solves WHERE sessionID = ? ORDER BY time", (session_id,))
+    elif sort_by == 'time_desc':
+        c.execute("SELECT solveID, time, scramble FROM Solves WHERE sessionID = ? ORDER BY time DESC", (session_id,))
+    elif sort_by == 'date_desc':
+        c.execute("Select solveID, time, scramble FROM Solves WHERE sessionID = ? ORDER BY date DESC", (session_id,))
     else:  # Default to sorting by date
         c.execute("SELECT solveID, time, scramble FROM Solves WHERE sessionID = ? ORDER BY date", (session_id,))
 
