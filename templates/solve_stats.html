@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solve Stats</title>
+    <script src="https://cdn.cubing.net/js/scramble-display" type="module"></script>
+    <link rel="stylesheet" href="/static/style.css">
+    
+    <!-- 
+        This project uses the scramble-display library, licensed under the
+        GNU General Public License v3.0. You can find a copy of the license
+        at https://www.gnu.org/licenses/gpl-3.0.html.
+    -->
 </head>
 <body>
     {% include 'navbar.html' %}
@@ -15,6 +23,10 @@
             <p><strong>Time:</strong> {{ time/1000 | round(3) }} s</p>
             <p><strong>Date:</strong> {{ date }}</p>
             <p><strong>Scramble:</strong> {{ scramble }}</p>
+            <div id="scramble-container">
+                <scramble-display id="scramble-display" scramble="{{ scramble }}"></scramble-display>
+            </div>
+
             <a href="{{ url_for('results') }}">Back to Results</a>
         {% endif %}
     </main>
