@@ -5,18 +5,21 @@ import time
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 
-#Create a response to control caching
+# Create a response to control caching
 def prevent_cache(response):
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
+    return response
 
 def connect_db():
     return sqlite3.connect('results.db')
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    response = make_response(render_template("index.html"))
+    prevent_cache(response)
+    return response
 
 @app.route("/timer")
 def timer():
@@ -50,12 +53,16 @@ def save_time():
     conn.commit()
     conn.close()
 
-    return jsonify({"status": "success"})
+    response = jsonify({"status": "success"})
+    prevent_cache(response)
+    return response
 
 @app.route("/get_recent_solves")
 def get_recent_solves():
     if 'user_id' not in session or 'active_session_id' not in session:
-        return jsonify({'solves': []})
+        response = jsonify({'solves': []})
+        prevent_cache(response)
+        return response
     
     session_id = session['active_session_id']
     
@@ -70,13 +77,16 @@ def get_recent_solves():
     recent_solves = c.fetchall()
     conn.close()
 
-    # Return data in JSON format
-    return jsonify({'solves': [{'time': solve[0]} for solve in recent_solves]})
+    response = jsonify({'solves': [{'time': solve[0]} for solve in recent_solves]})
+    prevent_cache(response)
+    return response
 
 @app.route("/get_ao5")
 def get_ao5():
     if 'user_id' not in session or 'active_session_id' not in session:
-        return jsonify({'ao5': None})
+        response = jsonify({'ao5': None})
+        prevent_cache(response)
+        return response
     
     session_id = session['active_session_id']
     
@@ -91,13 +101,17 @@ def get_ao5():
     recent_solves = c.fetchall()
     conn.close()
 
-    # Calculate the average of the last 5 solves
     if len(recent_solves) < 5:
-        return jsonify({'ao5': None})
+        response = jsonify({'ao5': None})
+        prevent_cache(response)
+        return response
     
     times = [solve[0] for solve in recent_solves]
     ao5 = sum(times) / len(times)
-    return jsonify({'ao5': ao5})
+    
+    response = jsonify({'ao5': ao5})
+    prevent_cache(response)
+    return response
 
 @app.route('/results')
 def results():
@@ -109,7 +123,7 @@ def results():
         return redirect(url_for('sessions'))
 
     session_id = session['active_session_id']
-    sort_by = request.args.get('sort_by', 'date_desc')  # Default to 'date_desc'
+    sort_by = request.args.get('sort_by', 'date_desc')
 
     conn = connect_db()
     c = conn.cursor()
@@ -126,7 +140,9 @@ def results():
     solves = c.fetchall()
     conn.close()
 
-    return render_template("results.html", solves=solves, sort_by=sort_by)
+    response = make_response(render_template("results.html", solves=solves, sort_by=sort_by))
+    prevent_cache(response)
+    return response
 
 @app.route('/delete_solve/<int:solve_id>', methods=['POST'])
 def delete_solve(solve_id):
@@ -136,7 +152,6 @@ def delete_solve(solve_id):
     conn = connect_db()
     c = conn.cursor()
 
-    # Delete the solve with the given ID
     c.execute("DELETE FROM Solves WHERE solveID = ?", (solve_id,))
     conn.commit()
     conn.close()
@@ -147,7 +162,9 @@ def delete_solve(solve_id):
 @app.route('/delete_most_recent', methods=["POST"])
 def delete_most_recent():
     if 'user_id' not in session or 'active_session_id' not in session:
-        return jsonify({"status": "error", "message": "Not logged in or no active session"}), 403
+        response = jsonify({"status": "error", "message": "Not logged in or no active session"}), 403
+        prevent_cache(response)
+        return response
 
     session_id = session['active_session_id']
 
@@ -157,8 +174,9 @@ def delete_most_recent():
     conn.commit()
     conn.close()
 
-    return jsonify({"status": "success", "message": "Most recent solve deleted"})
-
+    response = jsonify({"status": "success", "message": "Most recent solve deleted"})
+    prevent_cache(response)
+    return response
 
 @app.route('/delete_all', methods=["POST"])
 def delete_all():
@@ -170,7 +188,10 @@ def delete_all():
     c.execute("DELETE FROM Solves")
     conn.commit()
     conn.close()
-    return redirect(url_for('results'))
+
+    response = redirect(url_for('results'))
+    prevent_cache(response)
+    return response
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -199,7 +220,9 @@ def register():
                 return redirect(url_for('login'))
             conn.close()
 
-    return render_template('register.html')
+    response = make_response(render_template('register.html'))
+    prevent_cache(response)
+    return response
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -223,13 +246,17 @@ def login():
             else:
                 flash('Username or password is incorrect', 'danger')
 
-    return render_template('login.html')
+    response = make_response(render_template('login.html'))
+    prevent_cache(response)
+    return response
 
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
+    response = redirect(url_for('login'))
     flash('You were successfully logged out!', 'success')
-    return redirect(url_for('login'))
+    prevent_cache(response)
+    return response
 
 @app.route('/sessions', methods=['GET', 'POST'])
 def sessions():
@@ -253,26 +280,18 @@ def sessions():
                 flash('Session created successfully.', 'success')
 
         elif 'delete_session_id' in request.form:
-            delete_session_id = request.form['delete_session_id']
-
-            # First delete all solves in this session to avoid foreign key constraints
-            c.execute("DELETE FROM Solves WHERE sessionID = ?", (delete_session_id,))
+            session_id = request.form['delete_session_id']
+            c.execute("DELETE FROM Sessions WHERE sessionID = ?", (session_id,))
             conn.commit()
-
-            # Then delete the session
-            c.execute("DELETE FROM Sessions WHERE sessionID = ?", (delete_session_id,))
-            conn.commit()
-
-            # Remove the session from the active session
-            if session.get('active_session_id') == int(delete_session_id):
-                session.pop('active_session_id', None)
-                session.pop('active_session_name', None)
+            flash('Session deleted successfully.', 'success')
 
     c.execute("SELECT sessionID, sessionName, isPinned FROM Sessions WHERE userID = ?", (user_id,))
-    user_sessions = c.fetchall()
+    sessions = c.fetchall()
     conn.close()
 
-    return render_template('sessions.html', sessions=user_sessions)
+    response = make_response(render_template('sessions.html', sessions=sessions))
+    prevent_cache(response)
+    return response
 
 @app.route('/set_active_session/<int:session_id>')
 def set_active_session(session_id):
@@ -292,7 +311,9 @@ def set_active_session(session_id):
         flash("Session not found", 'danger')
     
     conn.close()
-    return redirect(url_for('timer'))
+    response = redirect(url_for('timer'))
+    prevent_cache(response)
+    return response
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
@@ -353,7 +374,9 @@ def dashboard():
     user_info = c.fetchone()
     conn.close()
 
-    return render_template('dashboard.html', user_info=user_info)
+    response = make_response(render_template('dashboard.html', user_info=user_info))
+    prevent_cache(response)
+    return response
 
 @app.route('/delete_account', methods=['POST'])
 def delete_account():
@@ -377,7 +400,9 @@ def delete_account():
 
     session.clear()
     flash('Your account has been deleted', 'success')
-    return redirect(url_for('register'))
+    response = redirect(url_for('register'))
+    prevent_cache(response)
+    return response
 
 @app.route('/solve_stats/<int:solve_id>')
 def solve_stats(solve_id):
@@ -402,22 +427,29 @@ def solve_stats(solve_id):
 
         if session_id in user_session_ids:
             solve_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(solve_date))
-            return render_template("solve_stats.html", solve_id=solve_id, time=solve_time, date=solve_date, scramble=scramble)
+            response = make_response(render_template("solve_stats.html", solve_id=solve_id, time=solve_time, date=solve_date, scramble=scramble))
         else:
-            return render_template('solve_stats.html', error_message="Sorry, you can't access this solve.")
+            response = make_response(render_template('solve_stats.html', error_message="Sorry, you can't access this solve."))
 
     else:
-        return render_template('404.html'), 404
+        response = make_response(render_template('404.html'), 404)
     
+    prevent_cache(response)
+    return response
+
 # Route for non-existing page
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    response = make_response(render_template('404.html'), 404)
+    prevent_cache(response)
+    return response
 
 # Route for handling server error
 @app.errorhandler(500)
 def server_error(e):
-    return render_template('500.html'), 500
+    response = make_response(render_template('500.html'), 500)
+    prevent_cache(response)
+    return response
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

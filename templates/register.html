@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    {% include 'navbar.html' %}
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
+    {% include 'navbar.html' %}
     <h1>Register</h1>
     
     {% with messages = get_flashed_messages(with_categories=true) %}
