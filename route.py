@@ -101,7 +101,7 @@ def results():
         return redirect(url_for('sessions'))
 
     session_id = session['active_session_id']
-    sort_by = request.args.get('sort_by', 'date')  # Default to 'date'
+    sort_by = request.args.get('sort_by', 'date_desc')  # Default to 'date_desc'
 
     conn = connect_db()
     c = conn.cursor()
@@ -111,8 +111,8 @@ def results():
     elif sort_by == 'time_desc':
         c.execute("SELECT solveID, time, scramble FROM Solves WHERE sessionID = ? ORDER BY time DESC", (session_id,))
     elif sort_by == 'date_desc':
-        c.execute("Select solveID, time, scramble FROM Solves WHERE sessionID = ? ORDER BY date DESC", (session_id,))
-    else:  # Default to sorting by date
+        c.execute("SELECT solveID, time, scramble FROM Solves WHERE sessionID = ? ORDER BY date DESC", (session_id,))
+    else:
         c.execute("SELECT solveID, time, scramble FROM Solves WHERE sessionID = ? ORDER BY date", (session_id,))
 
     solves = c.fetchall()
