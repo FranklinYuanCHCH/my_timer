@@ -64,6 +64,12 @@ nav ul li {
     float: left;
 }
 
+/* Right-align specific list items */
+nav ul li.right-align {
+    float: right; /* Align to the right */
+}
+
+/* Navbar link styles */
 nav ul li a {
     display: block;
     color: white;
@@ -74,6 +80,17 @@ nav ul li a {
 
 nav ul li a:hover {
     background-color: #111;
+}
+
+/* Active link styles */
+nav ul li.active a {
+    background-color: #007bff; /* Change the background color */
+    color: #fff; /* Change the text color */
+}
+
+nav ul li.active a:hover {
+    background-color: #0050a5; /* Change the background color */
+    color: #fff; /* Change the text color */
 }
 
 /* Footer styles */
