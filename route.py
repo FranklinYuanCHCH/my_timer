@@ -120,6 +120,22 @@ def results():
 
     return render_template("results.html", solves=solves, sort_by=sort_by)
 
+@app.route('/delete_solve/<int:solve_id>', methods=['POST'])
+def delete_solve(solve_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = connect_db()
+    c = conn.cursor()
+
+    # Delete the solve with the given ID
+    c.execute("DELETE FROM Solves WHERE solveID = ?", (solve_id,))
+    conn.commit()
+    conn.close()
+
+    flash('Solve deleted successfully.', 'success')
+    return redirect(url_for('results'))
+
 @app.route('/delete_most_recent', methods=["POST"])
 def delete_most_recent():
     if 'user_id' not in session or 'active_session_id' not in session:
