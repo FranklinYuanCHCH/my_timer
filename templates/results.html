@@ -16,10 +16,10 @@
         <div>
             <label for="sort-by">Sort by:</label>
             <select id="sort-by" onchange="changeSort()">
-                <option value="time_desc" {% if sort_by == 'time_desc'%}selected{% endif %}>Time (Slowest to Fastest)</option>
-                <option value="time" {% if sort_by == 'time' %}selected{% endif %}>Time (Fastest to Slowest)</option>
                 <option value="date" {% if sort_by == 'date' %}selected{% endif %}>Date (Oldest to Newest)</option>
                 <option value="date_desc" {% if sort_by == 'date_desc'%}selected{% endif%}>Date (Newest to Oldest)</option>
+                <option value="time_desc" {% if sort_by == 'time_desc'%}selected{% endif %}>Time (Slowest to Fastest)</option>
+                <option value="time" {% if sort_by == 'time' %}selected{% endif %}>Time (Fastest to Slowest)</option>
             </select>
         </div>
         

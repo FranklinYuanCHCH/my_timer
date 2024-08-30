@@ -122,15 +122,19 @@ def results():
 
 @app.route('/delete_most_recent', methods=["POST"])
 def delete_most_recent():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
+    if 'user_id' not in session or 'active_session_id' not in session:
+        return jsonify({"status": "error", "message": "Not logged in or no active session"}), 403
+
+    session_id = session['active_session_id']
 
     conn = connect_db()
     c = conn.cursor()
-    c.execute("DELETE FROM Solves WHERE solveID = (SELECT solveID FROM Solves ORDER BY solveID DESC LIMIT 1)")
+    c.execute("DELETE FROM Solves WHERE solveID = (SELECT solveID FROM Solves WHERE sessionID = ? ORDER BY date DESC LIMIT 1)", (session_id,))
     conn.commit()
     conn.close()
-    return redirect(url_for('results'))
+
+    return jsonify({"status": "success", "message": "Most recent solve deleted"})
+
 
 @app.route('/delete_all', methods=["POST"])
 def delete_all():

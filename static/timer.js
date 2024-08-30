@@ -198,5 +198,26 @@ document.addEventListener('keyup', (event) => {
     }
 });
 
+
+document.getElementById('delete-recent-solve').addEventListener('click', function() {
+    fetch('/delete_most_recent', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert(data.message);
+            // Optionally, refresh the page or recent solves list to reflect the deletion
+            location.reload();  // Refresh the page to update the recent solves
+        } else {
+            alert(data.message);
+        }
+    });
+});
+
 displayScramble();
 initializePage(); // Initialize page with recent solves and AO5
