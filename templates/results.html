@@ -26,10 +26,9 @@
         {% if solves %}
             <ul>
             {% for solve in solves %}
-                <li>
-                    {{ (solve[1] / 1000) | round(3) }} s - {{ solve[2] }}
-                    <a href="{{ url_for('solve_stats', solve_id=solve[0]) }}">View Stats</a>
-                </li>
+                <a href="{{ url_for('solve_stats', solve_id=solve[0]) }}">{{ (solve[1] / 1000) | round(3) }} </a>
+                {{ solve[2] }}
+                <br>
             {% endfor %}
             </ul>
         {% else %}
