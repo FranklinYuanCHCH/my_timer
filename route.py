@@ -1,9 +1,15 @@
-from flask import Flask, render_template, request, session, jsonify, redirect, url_for, flash
+from flask import Flask, render_template, request, session, jsonify, redirect, url_for, flash, make_response
 import sqlite3
 import time
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
+
+#Create a response to control caching
+def prevent_cache(response):
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
 
 def connect_db():
     return sqlite3.connect('results.db')
@@ -22,7 +28,9 @@ def timer():
         return redirect(url_for('sessions'))
 
     active_session_name = session.get('active_session_name')
-    return render_template("timer.html", active_session_name=active_session_name)
+    response = make_response(render_template("timer.html", active_session_name=active_session_name))
+    prevent_cache(response)
+    return response
 
 @app.route("/save_time", methods=["POST"])
 def save_time():

@@ -198,7 +198,6 @@ document.addEventListener('keyup', (event) => {
     }
 });
 
-
 document.getElementById('delete-recent-solve').addEventListener('click', function() {
     fetch('/delete_most_recent', {
         method: 'POST',
@@ -218,6 +217,13 @@ document.getElementById('delete-recent-solve').addEventListener('click', functio
         }
     })
     .catch(error => console.error('Error:', error));
+});
+
+// Force page reload if it is loaded from cache
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+        window.location.reload();
+    }
 });
 
 displayScramble();
