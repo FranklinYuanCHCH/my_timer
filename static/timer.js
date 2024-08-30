@@ -211,12 +211,13 @@ document.getElementById('delete-recent-solve').addEventListener('click', functio
     .then(data => {
         if (data.status === 'success') {
             alert(data.message);
-            // Optionally, refresh the page or recent solves list to reflect the deletion
-            location.reload();  // Refresh the page to update the recent solves
+            // Update recent solves and ao5 without refreshing the page
+            updateRecentSolves();
         } else {
             alert(data.message);
         }
-    });
+    })
+    .catch(error => console.error('Error:', error));
 });
 
 displayScramble();
