@@ -81,6 +81,7 @@ def get_recent_solves():
     prevent_cache(response)
     return response
 
+# Route for fetching the current Ao5 of the session
 @app.route("/get_ao5")
 def get_ao5():
     if 'user_id' not in session or 'active_session_id' not in session:
@@ -113,6 +114,7 @@ def get_ao5():
     prevent_cache(response)
     return response
 
+# Route for the results page
 @app.route('/results')
 def results():
     if 'user_id' not in session:
@@ -144,6 +146,7 @@ def results():
     prevent_cache(response)
     return response
 
+# Route for deleting a specific solve
 @app.route('/delete_solve/<int:solve_id>', methods=['POST'])
 def delete_solve(solve_id):
     if 'user_id' not in session:
@@ -159,6 +162,7 @@ def delete_solve(solve_id):
     flash('Solve deleted successfully.', 'success')
     return redirect(url_for('results'))
 
+# Route for deleting the most recent solve of the session
 @app.route('/delete_most_recent', methods=["POST"])
 def delete_most_recent():
     if 'user_id' not in session or 'active_session_id' not in session:
@@ -178,6 +182,7 @@ def delete_most_recent():
     prevent_cache(response)
     return response
 
+# Route for deleting all solves in the current session
 @app.route('/delete_all', methods=["POST"])
 def delete_all():
     if 'user_id' not in session:
@@ -193,6 +198,7 @@ def delete_all():
     prevent_cache(response)
     return response
 
+# Route for registeration of an account
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -224,6 +230,7 @@ def register():
     prevent_cache(response)
     return response
 
+# Route for logging into an account
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -250,6 +257,7 @@ def login():
     prevent_cache(response)
     return response
 
+# Route for logging out of an account
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
@@ -258,6 +266,7 @@ def logout():
     prevent_cache(response)
     return response
 
+# Route for the sessions page after logging in
 @app.route('/sessions', methods=['GET', 'POST'])
 def sessions():
     if 'user_id' not in session:
@@ -278,7 +287,7 @@ def sessions():
                           (session_name, 0, user_id))
                 conn.commit()
                 flash('Session created successfully.', 'success')
-
+        # Deleting a specific session and all solves associated with it
         elif 'delete_session_id' in request.form:
             session_id = request.form['delete_session_id']
             c.execute("DELETE FROM Sessions WHERE sessionID = ?", (session_id,))
@@ -293,6 +302,7 @@ def sessions():
     prevent_cache(response)
     return response
 
+# Deceleration for the current session variable which will be used on other pages
 @app.route('/set_active_session/<int:session_id>')
 def set_active_session(session_id):
     if 'user_id' not in session:
@@ -315,6 +325,7 @@ def set_active_session(session_id):
     prevent_cache(response)
     return response
 
+# Route for the dashbaord page of an user
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if 'user_id' not in session:
@@ -378,6 +389,7 @@ def dashboard():
     prevent_cache(response)
     return response
 
+# Route for permanently deleting an account and all sessions and solves associated with it
 @app.route('/delete_account', methods=['POST'])
 def delete_account():
     if 'user_id' not in session:
@@ -404,6 +416,7 @@ def delete_account():
     prevent_cache(response)
     return response
 
+# Route for single solve stat
 @app.route('/solve_stats/<int:solve_id>')
 def solve_stats(solve_id):
     if 'user_id' not in session:

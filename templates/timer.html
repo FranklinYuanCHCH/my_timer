@@ -16,36 +16,50 @@
 <body>
     {% include 'navbar.html' %}
     <main>
-        {% if session['active_session_id'] %}
-            <p>Active Session: {{ active_session_name }}</p>
-        {% else %}
-            <p>No active session. Please select a session.</p>
-        {% endif %}
-        <div id="scramble"></div>
-        <scramble-display id="scramble-display"></scramble-display>
-        <div class="timer" id="timer">0.000</div>
-        <button id="delete-recent-solve" class="btn btn-danger">Delete Most Recent Solve</button>
-        <p>Hint: Press and release the Space Bar to start, stop, and reset the timer.<br> Draw scramble may take a bit to load depending on your internet conditions.</p>
-
-        <!-- Recent solves section -->
-        <h3>Most Recent 5 Solves:</h3>
-        <table id="solves-table">
-            <thead>
-                <tr>
-                    <th>Times:</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Recent solves will be inserted here by JavaScript -->
-            </tbody>
-        </table>
-
-        <!-- AO5 section -->
-        <h3>Current AO5:</h3>
-        <p id="ao5"><i>#N/A</i></p>
-
+        <!-- Centered scramble -->
+        <div id="scramble-container">
+            <div id="scramble"></div>
+            <scramble-display id="scramble-display"></scramble-display>
+        </div>
+    
+        <!-- Flex container for timer and right-side content -->
+        <div id="main-content">
+            <div id="left-side-content">
+                <div class="timer" id="timer">0.000</div>
+                <button id="delete-recent-solve" class="btn btn-danger">Delete Most Recent Solve</button>
+                <p>Hint: Press and release the Space Bar to start, stop, and reset the timer.<br>Draw scramble may take a bit to load depending on your internet conditions.</p>
+            </div>
+    
+            <div id="right-side-content">
+                <!-- Active session box -->
+                <div class="box" id="active-session-box">
+                    {% if session['active_session_id'] %}
+                        <p>Current Session: {{ active_session_name }}</p>
+                    {% else %}
+                        <p>No active session. Please select a session.</p>
+                    {% endif %}
+                </div>
+    
+                <div class="box" id="ao5-box">
+                    <h3>Current AO5:</h3>
+                    <p id="ao5"><i>#N/A</i></p>
+                </div>
+                <!-- Recent solves box -->
+                <div class="box" id="recent-solves-box">
+                    <h3>Most Recent 5 Solves:</h3>
+                    <table id="solves-table">
+                        <tbody>
+                            <!-- Recent solves will be inserted here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+    
+                <!-- AO5 box -->
+            </div>
+        </div>
+    
         <script src="/static/timer.js"></script>
-    </main>
+    </main>       
     {% include 'footer.html' %}
 </body>
 </html>

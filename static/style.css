@@ -24,17 +24,75 @@ main {
     flex: 1; /* Allow main content to expand and fill available space */
 }
 
-/* Timer styles */
+/* Button styling*/
+button {
+    background-color: #ffffff;
+    border: 1px solid #c7c7c7;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: #d0d0d0;
+    border: 1px solid #a2a2a2;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* General box styling */
+.box {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Centered scramble container styles */
+#scramble-container {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Main content flex container */
+#main-content {
+    display: flex;
+    justify-content: space-between; /* Align left and right content */
+    align-items: flex-start; /* Align items to the top */
+    flex: 1; /* Ensure it takes up available space */
+}
+
+/* Left-side content styles */
+#left-side-content {
+    max-width: 60%; /* Allow more space for the timer and scramble */
+}
+
 .timer {
-    font-size: 48px;
-    margin: 20px;
+    font-size: 100px;
+    margin-bottom: 20px;
+}
+
+/* Right-side content styles */
+#right-side-content {
+    max-width: 300px; /* Set a max-width for the right-side content */
+    margin-left: 20px; /* Add some space between the left and right content */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Align content to the top */
+    margin-top: -200px; /* Optional: Adjust this value to move the content up */
 }
 
 #scramble {
+    padding-top:5%;
     font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
     font-size: 30px;
     line-height: 60px;
-    margin-bottom: 30px;
+    margin-bottom: 50px;
 }
 
 /* Navbar styles */
