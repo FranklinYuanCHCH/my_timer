@@ -12,6 +12,8 @@
         <h1>Session Solves</h1>
         <button id="deleteButton" onclick="return confirm('Are you sure you want to delete your most recent solve?');">Delete Most Recent Solve</button>
         <button id="deleteAllButton" onclick="return confirm('Are you sure you want to delete all of the solves in this session? THIS CHANGE WILL BE IRREVERSIBLE');">Delete All Solves</button>
+        <button onclick="window.location.href='/sessions';">Sessions</button>
+        <button onclick="window.location.href='/timer';">Timer</button>
         <!-- Sorting Toggle -->
         <div>
             <label for="sort-by">Sort by:</label>
@@ -24,18 +26,27 @@
         </div>
         
         {% if solves %}
-            <ul>
+        <ul>
             {% for solve in solves %}
-                <a href="{{ url_for('solve_stats', solve_id=solve[0]) }}">{{ (solve[1] / 1000) | round(3) }} </a>
-                {{ solve[2] }}
-                <br>
+                <div class="solve-container">
+                    <div class="time-box">
+                        <a href="{{ url_for('solve_stats', solve_id=solve[0]) }}">
+                            {{ (solve[1] / 1000) | round(3) }}
+                        </a>
+                    </div>
+                    <div class="scramble-box">
+                        {{ solve[2] }}
+                    </div>
+                    <div class="stats-button">
+                        <a href="{{ url_for('solve_stats', solve_id=solve[0]) }}">See Stats</a>
+                    </div>
+                </div>
             {% endfor %}
-            </ul>
+        </ul>
         {% else %}
             <p>No solves recorded in this session.</p>
         {% endif %}
         
-        <a href="{{ url_for('sessions') }}">Back to Sessions</a>
     </main>
     {% include 'footer.html' %}
 

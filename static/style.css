@@ -95,6 +95,95 @@ button:hover {
     margin-bottom: 50px;
 }
 
+/* Dropdown Style */
+select {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 16px;
+    color: #495057;
+    appearance: none; /* Remove the default arrow */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 100%;
+    max-width: 200px; /* Adjust width as needed */
+    margin-top: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+select:focus {
+    border-color: #80bdff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+select option {
+    padding: 10px;
+}
+
+/* Solve container styles */
+.solve-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* Time box styling */
+.time-box a {
+    background-color: #e6e6e6;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-right: 10px;
+    min-width: 100px;
+    text-align: center;
+    font-size: 20px;
+    text-decoration: none; /* Remove underline from the link */
+    color: black;
+    display: inline-block; /* Ensure padding is applied properly */
+    transition: background-color 0.3s ease;
+}
+
+.time-box a:hover {
+    background-color: #cccccc;
+}
+
+/* Scramble box styling */
+.scramble-box {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-right: 10px;
+    flex: 1; /* Flex-grow to take up remaining space */
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-size: 16px;
+    word-break: break-word; /* Handle long scrambles */
+}
+
+/* Stats button styling */
+.stats-button a {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: inline-block; /* Ensure padding is applied properly */
+}
+
+.stats-button a:hover {
+    background-color: #0056b3;
+}
+
+.stats-button {
+    margin-left: auto;
+}
+
 /* Navbar styles */
 nav {
     background-color: #333;
