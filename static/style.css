@@ -22,9 +22,10 @@ main {
     max-width: 1200px; /* Optional: limit the width of the main content */
     margin: 0 auto; /* Center the content */
     flex: 1; /* Allow main content to expand and fill available space */
+    transition: padding-top 0.3s ease, padding-bottom 0.3s ease; /* Smooth padding transitions */
 }
 
-/* Button styling*/
+/* Button styling */
 button {
     background-color: #ffffff;
     border: 1px solid #c7c7c7;
@@ -32,15 +33,13 @@ button {
     padding: 15px;
     margin-bottom: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 button:hover {
     background-color: #d0d0d0;
     border: 1px solid #a2a2a2;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Slightly more pronounced shadow */
 }
 
 /* General box styling */
@@ -51,6 +50,13 @@ button:hover {
     padding: 15px;
     margin-bottom: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.box:hover {
+    background-color: #f9f9f9;
+    border-color: #bbb;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 /* Centered scramble container styles */
@@ -75,6 +81,7 @@ button:hover {
 .timer {
     font-size: 100px;
     margin-bottom: 20px;
+    transition: font-size 0.3s ease, margin-bottom 0.3s ease;
 }
 
 /* Right-side content styles */
@@ -85,14 +92,16 @@ button:hover {
     flex-direction: column;
     justify-content: flex-start; /* Align content to the top */
     margin-top: -200px; /* Optional: Adjust this value to move the content up */
+    transition: margin-top 0.3s ease; /* Smooth margin transition */
 }
 
 #scramble {
-    padding-top:5%;
+    padding-top: 5%;
     font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
     font-size: 30px;
     line-height: 60px;
     margin-bottom: 50px;
+    transition: font-size 0.3s ease, margin-bottom 0.3s ease;
 }
 
 /* Dropdown Style */
@@ -111,16 +120,12 @@ select {
     margin-top: 10px;
     margin-bottom: 10px;
     cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 select:focus {
     border-color: #80bdff;
-    outline: none;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-select option {
-    padding: 10px;
 }
 
 /* Solve container styles */
@@ -143,11 +148,12 @@ select option {
     text-decoration: none; /* Remove underline from the link */
     color: black;
     display: inline-block; /* Ensure padding is applied properly */
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .time-box a:hover {
     background-color: #cccccc;
+    color: #333;
 }
 
 /* Scramble box styling */
@@ -161,6 +167,12 @@ select option {
     font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
     font-size: 16px;
     word-break: break-word; /* Handle long scrambles */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.scramble-box:hover {
+    background-color: #f9f9f9;
+    border-color: #bbb;
 }
 
 /* Stats button styling */
@@ -172,16 +184,13 @@ select option {
     padding: 10px 15px;
     text-decoration: none;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease;
     display: inline-block; /* Ensure padding is applied properly */
 }
 
 .stats-button a:hover {
     background-color: #0056b3;
-}
-
-.stats-button {
-    margin-left: auto;
+    transform: scale(1.05); /* Slight scale effect on hover */
 }
 
 /* Navbar styles */
@@ -195,6 +204,11 @@ nav {
     z-index: 1000; /* Ensures the navbar is on top of other content */
     display: flex;
     align-items: center; /* Center content vertically in the navbar */
+    transition: background-color 0.3s ease;
+}
+
+nav:hover {
+    background-color: #444; /* Darker background on hover */
 }
 
 /* Navbar list styles */
@@ -223,6 +237,7 @@ nav ul li a {
     text-align: center;
     padding: 20px;
     text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 nav ul li a:hover {
@@ -252,6 +267,11 @@ footer {
     width: 100%;
     height: 50px; /* Height of the footer */
     z-index: 1000; /* Ensures the footer is on top of other content */
+    transition: background-color 0.3s ease;
+}
+
+footer:hover {
+    background-color: #444; /* Darker background on hover */
 }
 
 /* Footer content styles */
@@ -264,26 +284,13 @@ footer {
     padding: 0 20px;
 }
 
-.footer-left {
-    margin: 0;
-}
-
-.footer-right a {
-    color: #007bff;
-    text-decoration: none;
-    margin: 0 10px;
-}
-
-.footer-right a:hover {
-    text-decoration: underline;
-}
-
 /* Flash message styles */
 .flash {
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 15px;
     font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .flash.danger {
