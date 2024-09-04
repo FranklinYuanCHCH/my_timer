@@ -42,6 +42,60 @@ button:hover {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Slightly more pronounced shadow */
 }
 
+/* Session button styling */
+.session-button {
+    text-align: center;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+    display: inline-block;
+    width: 200px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.session-button:hover {
+    background-color: #dfdfdf; 
+}
+
+/* Delete button styling */
+button[type="submit"][onclick*="confirm"] {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+    display: inline-block;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+button[type="submit"][onclick*="confirm"]:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+}
+
+input[type="text"] {
+    background-color: #ffffff;
+    border: 1px solid #c7c7c7;
+    border-radius: 8px;
+    padding: 15px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 300px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
 /* General box styling */
 .box {
     background-color: #ffffff;

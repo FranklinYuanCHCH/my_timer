@@ -20,9 +20,9 @@
         {% if sessions %}
             {% for session in sessions %}
                 <!-- Redirect to timer page when clicking on a session -->
-                <a href="{{ url_for('set_active_session', session_id=session[0]) }}">
-                    {{ session[1] }}
-                </a>
+                <form method="GET" action="{{ url_for('set_active_session', session_id=session[0]) }}" style="display:inline;">
+                    <button type="submit" class="session-button">{{ session[1] }}</button>
+                </form>
                 <!-- Delete Session Button -->
                 <form method="POST" action="{{ url_for('sessions') }}" style="display:inline;">
                     <input type="hidden" name="delete_session_id" value="{{ session[0] }}">
