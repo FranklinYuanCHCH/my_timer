@@ -270,8 +270,15 @@ footer {
     transition: background-color 0.3s ease;
 }
 
-footer:hover {
-    background-color: #444; /* Darker background on hover */
+.footer-link {
+    color: rgb(181, 205, 255); /* Default link color */
+    text-decoration: none; /* Remove underline */
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+/* Visited state to ensure color remains the same */
+.footer-link:visited {
+    color: rgb(181, 205, 255); /* Keep the color consistent after visiting */
 }
 
 /* Footer content styles */
@@ -304,3 +311,4 @@ footer:hover {
     background-color: #dff0d8;
     border: 1px solid green;
 }
+
