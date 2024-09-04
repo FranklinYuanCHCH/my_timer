@@ -280,7 +280,10 @@ def sessions():
         if 'session_name' in request.form:
             session_name = request.form['session_name'].strip()
 
-            if not session_name:
+            # Check for input length
+            if len(session_name) > 16:
+                flash('Session name must not exceed 16 characters.', 'danger')
+            elif not session_name:
                 flash('Session name must not be blank.', 'danger')
             else:
                 c.execute("INSERT INTO Sessions (sessionName, isPinned, userID) VALUES (?, ?, ?)",
@@ -341,6 +344,8 @@ def dashboard():
 
             if not new_username:
                 flash('Username must not be blank.', 'danger')
+            elif len(new_username) > 16:
+                flash('Username must be 16 characters or less.', 'danger')
             else:
                 # Check if the new username already exists
                 c.execute("SELECT userName FROM Users WHERE userName = ?", (new_username,))
@@ -376,6 +381,8 @@ def dashboard():
                         flash('New passwords do not match', 'danger')
                     elif new_password == stored_password:
                         flash('Your new password must be different from your current password', 'danger')
+                    elif len(new_password) > 16:
+                        flash('Your new password must not exceed 16 characters', 'danger') 
                     else:
                         c.execute("UPDATE Users SET password = ? WHERE userID = ?", (new_password, user_id))
                         conn.commit()

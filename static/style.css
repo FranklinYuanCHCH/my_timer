@@ -30,7 +30,7 @@ button {
     background-color: #ffffff;
     border: 1px solid #c7c7c7;
     border-radius: 8px;
-    padding: 15px;
+    padding: 9px;
     margin-bottom: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
@@ -63,8 +63,6 @@ button[type="submit"][onclick*="confirm"] {
     background-color: #f44336;
     color: white;
     border: none;
-    padding: 15px;
-    border-radius: 8px;
     text-align: center;
     font-size: 16px;
     margin: 10px 0;
@@ -78,11 +76,11 @@ button[type="submit"][onclick*="confirm"]:hover {
     background-color: #d32f2f; /* Darker red on hover */
 }
 
-input[type="text"] {
+input{
     background-color: #ffffff;
     border: 1px solid #c7c7c7;
-    border-radius: 8px;
-    padding: 15px;
+    border-radius: 7px;
+    padding: 7px;
     font-size: 16px;
     margin-bottom: 20px;
     width: 100%;
@@ -91,7 +89,7 @@ input[type="text"] {
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-input[type="text"]:focus {
+input:focus {
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
