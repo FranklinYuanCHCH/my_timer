@@ -27,7 +27,7 @@ def timer():
         return redirect(url_for('login'))
     
     if 'active_session_name' not in session:
-        flash("No active session selected. Please select a session.", 'warning')
+        flash("No active session selected. Please select a session.", 'danger')
         return redirect(url_for('sessions'))
 
     active_session_name = session.get('active_session_name')
@@ -121,7 +121,7 @@ def results():
         return redirect(url_for('login'))
 
     if 'active_session_id' not in session:
-        flash('No active session selected.', 'warning')
+        flash('No active session selected.', 'danger')
         return redirect(url_for('sessions'))
 
     session_id = session['active_session_id']
