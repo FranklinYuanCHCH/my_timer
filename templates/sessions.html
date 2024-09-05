@@ -10,6 +10,16 @@
     {% include 'navbar.html' %}
     <main>
         <h1>Sessions</h1>
+        <!-- Display flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
         <h2>Create a New Session</h2>
         <form method="POST" action="{{ url_for('sessions') }}">
             <label for="session_name">Session Name:</label>
@@ -34,16 +44,6 @@
             <p>Your session folder is empty. Create one:</p>
         {% endif %}
     
-        <!-- Display flash messages -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="flash-messages">
-                    {% for category, message in messages %}
-                        <div class="flash {{ category }}">{{ message }}</div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
     
     </main>
     {% include 'footer.html' %}

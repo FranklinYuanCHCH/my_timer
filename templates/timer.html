@@ -27,14 +27,17 @@
             <div id="left-side-content">
                 <div class="timer" id="timer">0.000</div>
                 <button id="delete-recent-solve" class="btn btn-danger">Delete Most Recent Solve</button>
-                <p>Hint: Press and release the Space Bar to start, stop, and reset the timer.<br>Draw scramble may take a bit to load depending on your internet conditions.</p>
+                <div class="box" id="hint">
+                    <p>Hint: Press and release the Space Bar to start, stop, and reset the timer.<br>Draw scramble may take a bit to load depending on your internet conditions.</p>
+                </div>
             </div>
     
             <div id="right-side-content">
                 <!-- Active session box -->
                 <div class="box" id="active-session-box">
                     {% if session['active_session_id'] %}
-                        <p>Current Session: {{ active_session_name }}</p>
+                        <h3>Current Session:</h3>
+                        <p>{{ active_session_name }}</p>
                     {% else %}
                         <p>No active session. Please select a session.</p>
                     {% endif %}
