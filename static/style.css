@@ -22,7 +22,31 @@ main {
     max-width: 1200px; /* Optional: limit the width of the main content */
     margin: 0 auto; /* Center the content */
     flex: 1; /* Allow main content to expand and fill available space */
-    transition: padding-top 0.3s ease, padding-bottom 0.3s ease; /* Smooth padding transitions */
+    text-align: center; /* Center text */
+}
+
+#recent-solves-box {
+    text-align: center; /* Center content in the recent solves box */
+}
+
+#solves-table {
+    width: 100%;
+    border-collapse: collapse; /* Collapse table borders */
+    margin: 0 auto; /* Center the table */
+    margin-bottom: 10px;
+}
+
+#solves-table th, #solves-table td {
+    padding: 5px;
+}
+
+#solves-table th {
+    background-color: #f4f4f4;
+}
+
+/* Active session box and AO5 box styles */
+#active-session-box, #ao5-box {
+    text-align: center; /* Center text in these boxes */
 }
 
 /* Button styling */

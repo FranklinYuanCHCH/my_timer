@@ -10,51 +10,55 @@
     {% include 'navbar.html' %}
 
     <main>
-        <h1>Dashboard</h1>
-        <p>Welcome, {{ user_info[0] }}!</p>
+        <div class="container">
+            <h1>Dashboard</h1>
+            <p>Welcome, {{ user_info[0] }}!</p>
 
-        <!-- Display flash messages -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="flash-messages">
-                    {% for category, message in messages %}
-                        <div class="flash {{ category }}">{{ message }}</div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
+            <!-- Display flash messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash {{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
 
-        <section>
-            <h2>Change Username</h2>
-            <form action="{{ url_for('dashboard') }}" method="post">
-                <label for="new_username">New Username:</label>
-                <input type="text" id="new_username" name="new_username" required minlength="1"><br>
-                <button type="submit">Update Username</button>
-            </form>
-        </section>
+            <!-- Sections for changing username, password, and deleting account -->
+            <section class="box">
+                <h2>Change Username</h2>
+                <form action="{{ url_for('dashboard') }}" method="post" class="form">
+                    <label for="new_username">New Username:</label>
+                    <input type="text" id="new_username" name="new_username" required minlength="1">
+                    <br>
+                    <button type="submit">Update Username</button>
+                </form>
+            </section>
 
-        <section>
-            <h2>Change Password</h2>
-            <form action="{{ url_for('dashboard') }}" method="post">
-                <label for="current_password">Current Password:</label>
-                <input type="password" id="current_password" name="current_password" required minlength="1"><br>
-                
-                <label for="new_password">New Password:</label>
-                <input type="password" id="new_password" name="new_password" required minlength="1"><br>
-                
-                <label for="confirm_password">Confirm New Password:</label>
-                <input type="password" id="confirm_password" name="confirm_password" required minlength="1"><br>
-                
-                <button type="submit">Update Password</button>
-            </form>
-        </section>
+            <section class="box">
+                <h2>Change Password</h2>
+                <form action="{{ url_for('dashboard') }}" method="post" class="form">
+                    <label for="current_password">Current Password:</label>
+                    <input type="password" id="current_password" name="current_password" required minlength="1">
+                    <br>
+                    <label for="new_password">New Password:</label>
+                    <input type="password" id="new_password" name="new_password" required minlength="1">
+                    <br>
+                    <label for="confirm_password">Confirm New Password:</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required minlength="1">
+                    <br>
+                    <button type="submit">Update Password</button>
+                </form>
+            </section>
 
-        <section>
-            <h2>Delete Account</h2>
-            <form action="{{ url_for('delete_account') }}" method="post">
-                <button type="submit" onclick="return confirm('Are you sure you want to delete your account? All of your sessions and solves will also be deleted. THIS CHANGE WILL BE IRREVERSIBLE');">Delete My Account</button>
-            </form>
-        </section>
+            <section class="box">
+                <h2>Delete Account</h2>
+                <form action="{{ url_for('delete_account') }}" method="post" class="form">
+                    <button type="submit" onclick="return confirm('Are you sure you want to delete your account? All of your sessions and solves will also be deleted. THIS CHANGE WILL BE IRREVERSIBLE');">Delete My Account</button>
+                </form>
+            </section>
+        </div>
     </main>
     {% include 'footer.html' %}
 </body>

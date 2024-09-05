@@ -20,11 +20,13 @@
             <h1>{{ error_message }}</h1>
         {% else %}
             <h1>Solve Stats</h1>
-            <p><strong>Time:</strong> {{ time/1000 | round(3) }} s</p>
-            <p><strong>Date:</strong> {{ date }}</p>
-            <p><strong>Scramble:</strong> {{ scramble }}</p>
-            <div id="scramble-container">
-                <scramble-display id="scramble-display" scramble="{{ scramble }}"></scramble-display>
+            <div class="box">
+                <p><strong>Time:</strong> {{ time/1000 | round(3) }} s</p>
+                <p><strong>Date:</strong> {{ date }}</p>
+                <p><strong>Scramble:</strong> {{ scramble }}</p>
+                <div id="scramble-container">
+                    <scramble-display id="scramble-display" scramble="{{ scramble }}"></scramble-display>
+                </div>
             </div>
             <!-- Delete Solve Form -->
             <form action="{{ url_for('delete_solve', solve_id=solve_id) }}" method="post" style="margin-top: 20px;">
