@@ -5,6 +5,7 @@ import time
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 
+
 # Create a response to control caching
 def prevent_cache(response):
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
@@ -12,8 +13,10 @@ def prevent_cache(response):
     response.headers['Expires'] = '0'
     return response
 
+
 def connect_db():
     return sqlite3.connect('results.db')
+
 
 @app.route("/")
 def home():
@@ -21,11 +24,12 @@ def home():
     prevent_cache(response)
     return response
 
+
 @app.route("/timer")
 def timer():
     if 'user_id' not in session:
         return redirect(url_for('login'))
-    
+
     if 'active_session_name' not in session:
         flash("No active session selected. Please select a session.", 'danger')
         return redirect(url_for('sessions'))
@@ -34,6 +38,7 @@ def timer():
     response = make_response(render_template("timer.html", active_session_name=active_session_name))
     prevent_cache(response)
     return response
+
 
 @app.route("/save_time", methods=["POST"])
 def save_time():
@@ -57,15 +62,16 @@ def save_time():
     prevent_cache(response)
     return response
 
+
 @app.route("/get_recent_solves")
 def get_recent_solves():
     if 'user_id' not in session or 'active_session_id' not in session:
         response = jsonify({'solves': []})
         prevent_cache(response)
         return response
-    
+
     session_id = session['active_session_id']
-    
+
     conn = connect_db()
     c = conn.cursor()
     c.execute("""
@@ -81,6 +87,7 @@ def get_recent_solves():
     prevent_cache(response)
     return response
 
+
 # Route for fetching the current Ao5 of the session
 @app.route("/get_ao5")
 def get_ao5():
@@ -88,9 +95,9 @@ def get_ao5():
         response = jsonify({'ao5': None})
         prevent_cache(response)
         return response
-    
+
     session_id = session['active_session_id']
-    
+
     conn = connect_db()
     c = conn.cursor()
     c.execute("""
@@ -106,13 +113,14 @@ def get_ao5():
         response = jsonify({'ao5': None})
         prevent_cache(response)
         return response
-    
+
     times = [solve[0] for solve in recent_solves]
     ao5 = sum(times) / len(times)
-    
+
     response = jsonify({'ao5': ao5})
     prevent_cache(response)
     return response
+
 
 # Route for the results page
 @app.route('/results')
@@ -146,6 +154,7 @@ def results():
     prevent_cache(response)
     return response
 
+
 # Route for deleting a specific solve
 @app.route('/delete_solve/<int:solve_id>', methods=['POST'])
 def delete_solve(solve_id):
@@ -161,6 +170,7 @@ def delete_solve(solve_id):
 
     flash('Solve deleted successfully.', 'success')
     return redirect(url_for('results'))
+
 
 # Route for deleting the most recent solve of the session
 @app.route('/delete_most_recent', methods=["POST"])
@@ -182,6 +192,7 @@ def delete_most_recent():
     prevent_cache(response)
     return response
 
+
 # Route for deleting all solves in the current session
 @app.route('/delete_all', methods=["POST"])
 def delete_all():
@@ -197,6 +208,7 @@ def delete_all():
     response = redirect(url_for('results'))
     prevent_cache(response)
     return response
+
 
 # Route for registeration of an account
 @app.route('/register', methods=['GET', 'POST'])
@@ -215,7 +227,7 @@ def register():
             c = conn.cursor()
             c.execute("SELECT userName FROM Users WHERE userName = ?", (username,))
             existing_user = c.fetchone()
-            
+
             if existing_user:
                 flash('Username is already taken', 'danger')
             else:
@@ -229,6 +241,7 @@ def register():
     response = make_response(render_template('register.html'))
     prevent_cache(response)
     return response
+
 
 # Route for logging into an account
 @app.route('/login', methods=['GET', 'POST'])
@@ -257,6 +270,7 @@ def login():
     prevent_cache(response)
     return response
 
+
 # Route for logging out of an account
 @app.route('/logout')
 def logout():
@@ -265,6 +279,7 @@ def logout():
     flash('You were successfully logged out!', 'success')
     prevent_cache(response)
     return response
+
 
 # Route for the sessions page after logging in
 @app.route('/sessions', methods=['GET', 'POST'])
@@ -305,6 +320,7 @@ def sessions():
     prevent_cache(response)
     return response
 
+
 # Deceleration for the current session variable which will be used on other pages
 @app.route('/set_active_session/<int:session_id>')
 def set_active_session(session_id):
@@ -315,18 +331,19 @@ def set_active_session(session_id):
     c = conn.cursor()
     c.execute("SELECT sessionName FROM Sessions WHERE sessionID = ?", (session_id,))
     session_data = c.fetchone()
-    
+
     if session_data:
         session['active_session_id'] = session_id
         session['active_session_name'] = session_data[0]
         flash(f"Active session set to {session_data[0]}", 'success')
     else:
         flash("Session not found", 'danger')
-    
+
     conn.close()
     response = redirect(url_for('timer'))
     prevent_cache(response)
     return response
+
 
 # Route for the dashbaord page of an user
 @app.route('/dashboard', methods=['GET', 'POST'])
@@ -350,7 +367,7 @@ def dashboard():
                 # Check if the new username already exists
                 c.execute("SELECT userName FROM Users WHERE userName = ?", (new_username,))
                 existing_user = c.fetchone()
-                
+
                 if existing_user:
                     flash('Username is already taken.', 'danger')
                 else:
@@ -369,7 +386,7 @@ def dashboard():
                 # Fetch the stored password from the database
                 c.execute("SELECT password FROM Users WHERE userID = ?", (user_id,))
                 stored_password = c.fetchone()
-                
+
                 if not stored_password:
                     flash('Error retrieving stored password.', 'danger')
                 else:
@@ -396,6 +413,7 @@ def dashboard():
     prevent_cache(response)
     return response
 
+
 # Route for permanently deleting an account and all sessions and solves associated with it
 @app.route('/delete_account', methods=['POST'])
 def delete_account():
@@ -408,10 +426,10 @@ def delete_account():
 
     # Delete all solves for the user
     c.execute("DELETE FROM Solves WHERE sessionID IN (SELECT sessionID FROM Sessions WHERE userID = ?)", (user_id,))
-    
+
     # Delete all sessions for the user
     c.execute("DELETE FROM Sessions WHERE userID = ?", (user_id,))
-    
+
     # Delete the user account
     c.execute("DELETE FROM Users WHERE userID = ?", (user_id,))
     conn.commit()
@@ -422,6 +440,7 @@ def delete_account():
     response = redirect(url_for('register'))
     prevent_cache(response)
     return response
+
 
 # Route for single solve stat
 @app.route('/solve_stats/<int:solve_id>')
@@ -453,9 +472,10 @@ def solve_stats(solve_id):
 
     else:
         response = make_response(render_template('404.html'), 404)
-    
+
     prevent_cache(response)
     return response
+
 
 # Route for non-existing page
 @app.errorhandler(404)
@@ -464,12 +484,14 @@ def page_not_found(e):
     prevent_cache(response)
     return response
 
+
 # Route for handling server error
 @app.errorhandler(500)
 def server_error(e):
     response = make_response(render_template('500.html'), 500)
     prevent_cache(response)
     return response
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
