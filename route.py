@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, session, jsonify, redirect, url_for, flash, make_response
+import bcrypt
 import sqlite3
 import time
 
@@ -231,7 +232,8 @@ def register():
             if existing_user:
                 flash('Username is already taken', 'danger')
             else:
-                c.execute("INSERT INTO Users (userName, password) VALUES (?, ?)", (username, password))
+                hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+                c.execute("INSERT INTO Users (userName, password) VALUES (?, ?)", (username, hashed_password))
                 conn.commit()
                 flash('You were successfully registered!', 'success')
                 conn.close()
@@ -259,7 +261,7 @@ def login():
             user = c.fetchone()
             conn.close()
 
-            if user and password == user[1]:
+            if user and bcrypt.checkpw(password.encode('utf-8'), user[1]):
                 session['user_id'] = user[0]
                 flash('You were successfully logged in!', 'success')
                 return redirect(url_for('sessions'))
@@ -345,7 +347,7 @@ def set_active_session(session_id):
     return response
 
 
-# Route for the dashbaord page of an user
+# Route for the dashboard page of an user
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if 'user_id' not in session:
@@ -364,7 +366,6 @@ def dashboard():
             elif len(new_username) > 16:
                 flash('Username must be 16 characters or less.', 'danger')
             else:
-                # Check if the new username already exists
                 c.execute("SELECT userName FROM Users WHERE userName = ?", (new_username,))
                 existing_user = c.fetchone()
 
@@ -383,7 +384,6 @@ def dashboard():
             if not current_password or not new_password or not confirm_password:
                 flash('All password fields must be filled out.', 'danger')
             else:
-                # Fetch the stored password from the database
                 c.execute("SELECT password FROM Users WHERE userID = ?", (user_id,))
                 stored_password = c.fetchone()
 
@@ -392,16 +392,17 @@ def dashboard():
                 else:
                     stored_password = stored_password[0]
 
-                    if current_password != stored_password:
+                    if not bcrypt.checkpw(current_password.encode('utf-8'), stored_password):
                         flash('Current password is incorrect', 'danger')
                     elif new_password != confirm_password:
                         flash('New passwords do not match', 'danger')
-                    elif new_password == stored_password:
+                    elif new_password == current_password:
                         flash('Your new password must be different from your current password', 'danger')
                     elif len(new_password) > 16:
-                        flash('Your new password must not exceed 16 characters', 'danger') 
+                        flash('Your new password must not exceed 16 characters', 'danger')
                     else:
-                        c.execute("UPDATE Users SET password = ? WHERE userID = ?", (new_password, user_id))
+                        hashed_new_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+                        c.execute("UPDATE Users SET password = ? WHERE userID = ?", (hashed_new_password, user_id))
                         conn.commit()
                         flash('Password updated successfully', 'success')
 
