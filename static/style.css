@@ -191,6 +191,27 @@ input:focus {
     margin-bottom: 30px;
 }
 
+#scramble-display-container {
+    width: 400px; /* Fixed width */
+    height: 300px; /* Fixed height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin: 0 auto;
+}
+
+#scramble-display {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-size: 20px;
+    line-height: 30px;
+    text-align: center;
+}
+
 /* Main content flex container */
 #main-content {
     display: flex;
@@ -216,9 +237,8 @@ input:focus {
     margin-left: 20px; /* Add some space between the left and right content */
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Align content to the top */
-    margin-top: -200px; /* Optional: Adjust this value to move the content up */
-    transition: margin-top 0.3s ease; /* Smooth margin transition */
+    justify-content: center; /* Vertically center the content */
+    height: 100vh; /* Set the height to fill the viewport */
 }
 
 #scramble {
