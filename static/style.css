@@ -101,9 +101,46 @@ button[type="submit"][onclick*="confirm"] {
     color: white;
 }
 
+.update-input:hover{
+    background-color: #00438b;
+}
+
 button[type="submit"][onclick*="confirm"]:hover {
     background-color: #d32f2f; /* Darker red on hover */
 }
+
+/* Form styles */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center form elements horizontally */
+    max-width: 400px; /* Set a max width for the form */
+    margin: 0 auto; /* Center the form horizontally */
+    padding: 20px; /* Add padding inside the form */
+}
+
+/* Form labels */
+form label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    text-align: left;
+    width: 100%; /* Make labels full width */
+}
+
+/* Form input boxes */
+form input[type="text"], form input[type="password"] {
+    width: 100%; /* Full width of the form */
+    max-width: 300px; /* Max width of input boxes */
+    margin-bottom: 15px; /* Space between input boxes */
+}
+
+/* Form buttons */
+form button {
+    width: 100%; /* Full width of the form */
+    max-width: 300px; /* Max width of buttons */
+    padding: 10px; /* Add padding inside buttons */
+}
+
 
 input{
     background-color: #ffffff;
