@@ -376,18 +376,27 @@ def dashboard():
     conn = connect_db()
     c = conn.cursor()
 
+    # Retrieve the current username
+    c.execute("SELECT userName FROM Users WHERE userID = ?", (user_id,))
+    current_username = c.fetchone()[0]
+
     if request.method == 'POST':
         if 'new_username' in request.form:
             new_username = request.form['new_username'].strip()
 
+            # Check if the new username is blank or exceeds 16 characters
             if not new_username:
                 flash('Username must not be blank.', 'danger')
             elif len(new_username) > 16:
                 flash('Username must be 16 characters or less.', 'danger')
+            # Check if the new username is the same as the current username
+            elif new_username == current_username:
+                flash('The new username must be different from the current username.', 'danger')
             else:
                 c.execute("SELECT userName FROM Users WHERE userName = ?", (new_username,))
                 existing_user = c.fetchone()
 
+                # Check if the new username is already taken
                 if existing_user:
                     flash('Username is already taken.', 'danger')
                 else:
@@ -400,6 +409,7 @@ def dashboard():
             new_password = request.form['new_password'].strip()
             confirm_password = request.form['confirm_password'].strip()
 
+            # Check if password fields are filled out and validate passwords
             if not current_password or not new_password or not confirm_password:
                 flash('All password fields must be filled out.', 'danger')
             else:
@@ -411,6 +421,7 @@ def dashboard():
                 else:
                     stored_password = stored_password[0]
 
+                    # Validate current password, new password, and confirm password
                     if not bcrypt.checkpw(current_password.encode('utf-8'), stored_password):
                         flash('Current password is incorrect', 'danger')
                     elif new_password != confirm_password:
@@ -425,6 +436,7 @@ def dashboard():
                         conn.commit()
                         flash('Password updated successfully', 'success')
 
+    # Pass current username to the template for display
     c.execute("SELECT userName FROM Users WHERE userID = ?", (user_id,))
     user_info = c.fetchone()
     conn.close()
