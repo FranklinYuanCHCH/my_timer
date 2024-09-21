@@ -219,16 +219,24 @@ def register():
         password = request.form['password'].strip()
         confirm_password = request.form['confirm_password'].strip()
 
+        # Check for empty fields
         if not username or not password or not confirm_password:
             flash('All fields must be filled out.', 'danger')
+        # Check if the passwords match
         elif password != confirm_password:
             flash('Passwords do not match', 'danger')
+        # Check if username or password exceeds 16 characters
+        elif len(username) > 16:
+            flash('Username cannot exceed 16 characters.', 'danger')
+        elif len(password) > 16:
+            flash('Password cannot exceed 16 characters.', 'danger')
         else:
             conn = connect_db()
             c = conn.cursor()
             c.execute("SELECT userName FROM Users WHERE userName = ?", (username,))
             existing_user = c.fetchone()
 
+            # Check if the username is already taken
             if existing_user:
                 flash('Username is already taken', 'danger')
             else:
