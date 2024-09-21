@@ -13,6 +13,36 @@ body {
     overflow: hidden;
 }
 
+body {
+    font-family: 'Lexend', sans-serif;
+    font-size: 18px; /* Adjust this as needed */
+}
+
+/* Optional: Customize other font sizes */
+h1, h2, h3, h4, h5, h6, button {
+    font-family: 'Lexend', sans-serif;
+}
+
+#home-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Set the height to the full viewport height */
+    text-align: center; /* Center the text horizontally */
+    flex-direction: column; /* Stack the elements vertically */
+}
+
+/* Optional styling for the links */
+#home-content a {
+    margin-top: 10px; /* Add space between the links */
+    text-decoration: none; /* Remove underline */
+    color: #007BFF; /* Link color */
+}
+
+#home-content a:hover {
+    text-decoration: underline; /* Add underline on hover */
+}
+
 /* Main content area */
 main {
     padding-top: 60px; /* Height of the navbar */
@@ -56,6 +86,7 @@ button {
     border-radius: 8px;
     padding: 9px;
     margin-bottom: 20px;
+    cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -201,7 +232,7 @@ input:focus {
     border-radius: 8px;
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 10px;
+    padding: 5px;
     margin: 0 auto;
 }
 
@@ -242,9 +273,9 @@ input:focus {
 }
 
 #scramble {
-    padding-top: 5%;
-    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-    font-size: 30px;
+    padding-top: 10%;
+    font-family: 'Lexend', sans-serif;
+    font-size: 50px;
     line-height: 60px;
     margin-bottom: 50px;
     transition: font-size 0.3s ease, margin-bottom 0.3s ease;
