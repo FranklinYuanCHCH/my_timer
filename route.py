@@ -327,19 +327,26 @@ def sessions():
 @app.route('/set_active_session/<int:session_id>')
 def set_active_session(session_id):
     if 'user_id' not in session:
+        flash('You need to log in to access sessions.', 'danger')
         return redirect(url_for('login'))
 
+    user_id = session['user_id']
     conn = connect_db()
     c = conn.cursor()
-    c.execute("SELECT sessionName FROM Sessions WHERE sessionID = ?", (session_id,))
+    
+    # Check if the session belongs to the logged-in user
+    c.execute("SELECT sessionName FROM Sessions WHERE sessionID = ? AND userID = ?", (session_id, user_id))
     session_data = c.fetchone()
 
     if session_data:
+        # Session belongs to the user, set it as active
         session['active_session_id'] = session_id
         session['active_session_name'] = session_data[0]
         flash(f"Active session set to {session_data[0]}", 'success')
     else:
-        flash("Session not found", 'danger')
+        # Either the session doesn't exist or doesn't belong to the user
+        flash("You don't have permission to access this session.", 'danger')
+        return redirect(url_for('sessions'))
 
     conn.close()
     response = redirect(url_for('timer'))
