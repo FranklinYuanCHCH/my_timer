@@ -276,7 +276,11 @@ def login():
 # Route for logging out of an account
 @app.route('/logout')
 def logout():
+    # Remove user-related data from session
     session.pop('user_id', None)
+    session.pop('active_session_id', None)  # Clear active session ID
+    session.pop('active_session_name', None)  # Clear active session name
+    
     response = redirect(url_for('login'))
     flash('You were successfully logged out!', 'success')
     prevent_cache(response)
