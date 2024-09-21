@@ -498,9 +498,9 @@ def page_not_found(e):
 
 
 # Route for handling server error
-@app.errorhandler(500)
+@app.errorhandler(405)
 def server_error(e):
-    response = make_response(render_template('500.html'), 500)
+    response = make_response(render_template('405.html'), 405)
     prevent_cache(response)
     return response
 
