@@ -10,8 +10,20 @@
     {% include 'navbar.html' %}
     <main id="home-content">
         <h1>Welcome to Franklin's Timer</h1>
+        <p><i>An easy to use Rubik's Cube timer.<br>
+            Session system - allowing you to easily organise your solves<br>
+            AO5 Calculation - calculated in real time, keeping you up to date!
+        </i></p>
         <a href="https://www.youtube.com/watch?v=-m1rMgNj4Vs">Watch my Roux Method One-Handed Tips</a><br>
-        <a href="https://blogs.mtdv.me/watch?v=honerable_mention">Honerable Mention</a>
+        {% if 'user_id' in session %}
+            <h2>Start solving!</h2>
+            <button onclick="window.location.href='/sessions';">Create a session</button>
+            <button onclick="window.location.href='/timer';">Already selected a session? Start using Timer!</button>
+        {% else %}
+            <h2>Get started!</h2>
+            <button onclick="window.location.href='/login';">Login to existing account</button>
+            <button onclick="window.location.href='/register';">Create a new account</button>
+        {% endif %}
     </main>
     {% include 'footer.html' %}
 </body>

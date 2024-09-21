@@ -27,6 +27,7 @@
             <br>
             <button type="submit">Create Session</button>
         </form>
+        <h2>Your Sessions:</h2>
         {% if sessions %}
             {% for session in sessions %}
                 <!-- Redirect to timer page when clicking on a session -->
@@ -41,7 +42,7 @@
                 <br>
             {% endfor %}
         {% else %}
-            <p>Your session folder is empty. Create one:</p>
+            <p>Your session folder is empty.</p>
         {% endif %}
     
     

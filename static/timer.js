@@ -198,25 +198,31 @@ document.addEventListener('keyup', (event) => {
     }
 });
 
-document.getElementById('delete-recent-solve').addEventListener('click', function() {
-    fetch('/delete_most_recent', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({})
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            alert(data.message);
-            // Update recent solves and ao5 without refreshing the page
-            updateRecentSolves();
-        } else {
-            alert(data.message);
-        }
-    })
-    .catch(error => console.error('Error:', error));
+document.getElementById('delete-recent-solve').addEventListener('click', function(event) {
+    // Ask for confirmation
+    const userConfirmed = confirm('Are you sure you want to delete the most recent solve?');
+
+    if (userConfirmed) {
+        // If the user confirmed, proceed with the deletion
+        fetch('/delete_most_recent', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Update recent solves and ao5 without refreshing the page
+                updateRecentSolves();
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    } else {
+        // User cancelled the action, prevent further processing
+        event.preventDefault();
+    }
 });
 
 // Force page reload if it is loaded from cache

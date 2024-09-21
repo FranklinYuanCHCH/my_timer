@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Franklin's Timer</title>
     <link rel="stylesheet" href="/static/style.css">
     <link href='https://fonts.googleapis.com/css?family=Lexend' rel='stylesheet'>
 </head>
@@ -15,7 +14,7 @@
             <li class="{% if request.path == url_for('results') %}active{% endif %}"><a href="/results">Results</a></li>
             <li class="{% if request.path == url_for('sessions') %}active{% endif %}"><a href="/sessions">Sessions</a></li>
             {% if 'user_id' in session %}
-                <li class="{% if request.path == url_for('dashboard') %}active{% endif %} right-align"><a href="/dashboard">Dashboard</a></li>
+                <li class="{% if request.path == url_for('dashboard') %}active{% endif %} right-align"><a href="/dashboard">Profile</a></li>
                 <li class="{% if request.path == url_for('logout') %}active{% endif %} right-align"><a href="/logout">Logout</a></li>
             {% else %}
                 <li class="{% if request.path == url_for('login') %}active{% endif %} right-align"><a href="/login">Login</a></li>
