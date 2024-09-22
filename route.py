@@ -25,6 +25,17 @@ def home():
     prevent_cache(response)
     return response
 
+@app.route("/guide")
+def guide():
+    response = make_response(render_template("guide.html"))
+    prevent_cache(response)
+    return response
+
+@app.route("/about")
+def about():
+    response = make_response(render_template("about.html"))
+    prevent_cache(response)
+    return response
 
 @app.route("/timer")
 def timer():
