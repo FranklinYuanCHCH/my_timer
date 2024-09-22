@@ -145,7 +145,12 @@ function updateRecentSolves() {
 }
 
 function calculateAo5() {
-    if (recentSolves.length < 5) return; // Ensure we have at least 5 solves
+    const ao5Element = document.getElementById('ao5');
+
+    if (recentSolves.length < 5) {
+        ao5Element.textContent = '#N/A'; // Update to "#N/A" if there are fewer than 5 solves
+        return;
+    }
 
     // Sort times and remove the fastest and slowest
     const sortedTimes = recentSolves.slice().sort((a, b) => a - b);
@@ -154,7 +159,6 @@ function calculateAo5() {
 
     // Calculate the average of the remaining three times
     const average = sortedTimes.reduce((sum, time) => sum + time, 0) / sortedTimes.length;
-    const ao5Element = document.getElementById('ao5');
     ao5Element.textContent = (average / 1000).toFixed(3); // Convert ms to s and display
 }
 
@@ -216,6 +220,7 @@ document.getElementById('delete-recent-solve').addEventListener('click', functio
             if (data.status === 'success') {
                 // Update recent solves and ao5 without refreshing the page
                 updateRecentSolves();
+                calculateAo5(); // Call this to update the AO5 after recent solves are updated
             }
         })
         .catch(error => console.error('Error:', error));
