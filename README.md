@@ -16,3 +16,5 @@ This project is licensed under the GNU General Public License v3.0. See the [LIC
 ## Acknowledgements
 
 This project uses the `scramble-display` library from the [Cubing.js](https://github.com/cubing/cubing.js) project, which is licensed under the GNU General Public License v3.0.
+
+Icon by Muhammad Ahsanu Nadia, Gregor Cresnar, Landan Lloyd, sajula from The Noun Project

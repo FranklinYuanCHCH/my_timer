@@ -18,6 +18,21 @@ body {
     font-size: 18px; /* Adjust this as needed */
 }
 
+/* Style for the navigation icon next to Home */
+.nav-icon {
+    width: 20px;  /* Adjust the size as needed */
+    height: 20px;
+    vertical-align: middle;  /* Aligns the image vertically with the text */
+    margin-right: 8px;  /* Space between the icon and the text */
+}
+
+.home-logo {
+    width: 80px;  /* Adjust the size as needed */
+    height: 80px;
+    vertical-align: middle;  /* Aligns the image vertically with the text */
+    margin-right: 0px;  /* Space between the icon and the text */
+}
+
 /* Optional: Customize other font sizes */
 h1, h2, h3, h4, h5, h6, button {
     font-family: 'Lexend', sans-serif;

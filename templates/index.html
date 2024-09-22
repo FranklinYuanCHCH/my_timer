@@ -4,21 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="/static/images/icon.png" type="image/png">
     <title>Home - Franklin's Timer</title>
 </head>
 <body>
     {% include 'navbar.html' %}
     <main id="home-content">
         <h1>Welcome to Franklin's Timer</h1>
+        <img src="/static/images/icon.png" alt="Home Icon" class="home-logo">
         <p><i>An easy to use Rubik's Cube timer.<br>
-            Session system - allowing you to easily organise your solves<br>
-            AO5 Calculation - calculated in real time, keeping you up to date!
+            Session system - allows you to easily organise your solves<br>
+            AO5 Calculation - calculates in real time, keeps you up to date!
         </i></p>
         <a href="https://www.youtube.com/watch?v=-m1rMgNj4Vs">Watch my Roux Method One-Handed Tips</a><br>
         {% if 'user_id' in session %}
             <h2>Start solving!</h2>
             <button onclick="window.location.href='/sessions';">Create a session</button>
-            <button onclick="window.location.href='/timer';">Already selected a session? Start using Timer!</button>
+            <button onclick="window.location.href='/timer';">Already have a session? Select it and start using Timer!</button>
         {% else %}
             <h2>Get started!</h2>
             <button onclick="window.location.href='/login';">Login to existing account</button>

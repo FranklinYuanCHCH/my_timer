@@ -9,18 +9,72 @@
 <body>
     <nav>
         <ul>
-            <li class="{% if request.path == url_for('home') %}active{% endif %}"><a href="/">Home</a></li>
-            <li class="{% if request.path == url_for('timer') %}active{% endif %}"><a href="/timer">Timer</a></li>
-            <li class="{% if request.path == url_for('results') %}active{% endif %}"><a href="/results">Results</a></li>
-            <li class="{% if request.path == url_for('sessions') %}active{% endif %}"><a href="/sessions">Sessions</a></li>
+            <!-- Home button with the icon image -->
+            <li class="{% if request.path == url_for('home') %}active{% endif %}">
+                <a href="/">
+                    <img src="/static/images/icon.png" alt="Home Icon" class="nav-icon">
+                    Home
+                </a>
+            </li>
+
+            <!-- Timer button with the icon image -->
+            <li class="{% if request.path == url_for('timer') %}active{% endif %}">
+                <a href="/timer">
+                    <img src="/static/images/timer.png" alt="Timer Icon" class="nav-icon">
+                    Timer
+                </a>
+            </li>
+
+            <!-- Results button with the icon image -->
+            <li class="{% if request.path == url_for('results') %}active{% endif %}">
+                <a href="/results">
+                    <img src="/static/images/results.png" alt="Results Icon" class="nav-icon">
+                    Results
+                </a>
+            </li>
+
+            <!-- Sessions button with the icon image -->
+            <li class="{% if request.path == url_for('sessions') %}active{% endif %}">
+                <a href="/sessions">
+                    <img src="/static/images/sessions.png" alt="Sessions Icon" class="nav-icon">
+                    Sessions
+                </a>
+            </li>
+
             {% if 'user_id' in session %}
-                <li class="{% if request.path == url_for('dashboard') %}active{% endif %} right-align"><a href="/dashboard">Profile</a></li>
-                <li class="{% if request.path == url_for('logout') %}active{% endif %} right-align"><a href="/logout">Logout</a></li>
+                <!-- Profile button with the icon image -->
+                <li class="{% if request.path == url_for('dashboard') %}active{% endif %} right-align">
+                    <a href="/dashboard">
+                        <img src="/static/images/profile.png" alt="Profile Icon" class="nav-icon">
+                        Profile
+                    </a>
+                </li>
+
+                <!-- Logout button with the icon image -->
+                <li class="{% if request.path == url_for('logout') %}active{% endif %} right-align">
+                    <a href="/logout">
+                        <img src="/static/images/logout.png" alt="Logout Icon" class="nav-icon">
+                        Logout
+                    </a>
+                </li>
             {% else %}
-                <li class="{% if request.path == url_for('login') %}active{% endif %} right-align"><a href="/login">Login</a></li>
-                <li class="{% if request.path == url_for('register') %}active{% endif %} right-align"><a href="/register">Register</a></li>
+                <!-- Login button with the icon image -->
+                <li class="{% if request.path == url_for('login') %}active{% endif %} right-align">
+                    <a href="/login">
+                        <img src="/static/images/login.png" alt="Login Icon" class="nav-icon">
+                        Login
+                    </a>
+                </li>
+
+                <!-- Register button with the icon image -->
+                <li class="{% if request.path == url_for('register') %}active{% endif %} right-align">
+                    <a href="/register">
+                        <img src="/static/images/register.png" alt="Register Icon" class="nav-icon">
+                        Register
+                    </a>
+                </li>
             {% endif %}
         </ul>
-    </nav>        
+    </nav>
 </body>
 </html>
