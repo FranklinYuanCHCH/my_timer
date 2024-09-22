@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="no-scroll">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Guide - Franklin's Timer</title>
@@ -9,7 +9,99 @@
 <body>
     {% include 'navbar.html' %}
     <main>  
-      <h1>Guide</h1>
+        <h1>Website Guide</h1>
+        <hr>
+        <section>
+            <h2>Getting Started</h2>
+            <p>Welcome to Franklin's Timer! To begin, you need to create an account or log in if you already have one.</p>
+        </section>
+        <hr>
+        <section>
+            <h2>Creating an Account</h2>
+            <ol>
+                <li>Click on the "Register" link in the navigation bar.</li>
+                <li>Fill in the required fields: username and password (16-character limit).</li>
+                <li>Click the blue "Register" button to create your account.</li>
+            </ol>
+        </section>
+        <hr>
+        <section>
+            <h2>Logging In</h2>
+            <ol>
+                <li>Click on the "Login" link in the navigation bar.</li>
+                <li>Enter your username and password.</li>
+                <li>Click "Login" to gain access to full functionality of this website.</li>
+            </ol>
+        </section>
+        <hr>
+        <section>
+            <h2>Creating Sessions</h2>
+            <p>After logging in, you will be redirected to the Sessions page:</p>
+            <ol>
+                <li>If you don't have any sessions, enter a session name of your liking.</li>
+                <li>Click "Create Session" to create the session.</li>
+                <li>Click the white button with the session name to select that session, and you will be redirected to the timer page.</li>
+                <li>Click the red "Delete" button to delete a session and all solves in that session.</li>
+            </ol>
+        </section>
+        <hr>
+        <section>
+            <h2>Using the Timer</h2>
+            <p>Once you have selected a session, you can start timing your Rubik's Cube solves:</p>
+            <ol>
+                <li>Follow the scramble at the top of the screen and match your cube with the displayed image to make sure it is correct.</li>
+                <li>Press and release the space bar to start the timer and begin solving.</li>
+                <li>Press the space bar to stop the timer, this is to ensure accurate timing.</li>
+                <li>A new scramble is generated and the scramble display image updates once the timer has stopped.</li>
+                <li>On the right side of the screen, your selected session, current AO5, and the most recent 5 solves will be displayed.</li>
+                <li>If you wish to delete the most recent solve in your current session, click the "Delete Most Recent Solve" button below the timer.</li>
+                <p><i>*Note: AO5 stands for Average of 5 in Rubik's Cube terminology. It is calculated by removing the fastest and 
+                    the slowest solves in 5 solves and then take the mean of the rest of the solves.</i></p>
+            </ol>
+        </section>
+        <hr>
+        <section>
+            <h2>Viewing Results</h2>
+            <p>After completing a solve, you can view your results:</p>
+            <ol>
+                <li>Click the "Results" button on the navigation bar.</li>
+                <li>Here, you can see a list of all your solves in your selected session, along with scramble information and times.</li>
+                <li>Use the "Sort by:" dropdown to change the order your solves are sorted in.</li>
+                <li>You can also click on individual solves for more details.</li>
+            </ol>
+        </section>
+        <hr>
+        <section>
+            <h2>Deleting Solves</h2>
+            <p>If you need to remove a solve:</p>
+            <ol>
+                <li>Go to the "Results" page.</li>
+                <li>Click the "Delete Most Recent Solve" button towards the top to remove your last solve.</li>
+                <li>Click the "Delete All Solves" button to remove all solves in the session.</li>
+                <li>Click on the "See Stats" button of a specific solve, then click on the "Delete This Solve" button to remove an individual solve.</li>
+            </ol>
+        </section>
+        <hr>
+        <section>
+            <h2>Change Login Details</h2>
+            <p>If you would like to change your login details:</p>
+            <ol>
+                <li>Click the "Profile" button in the navigation bar.</li>
+                <li>You may change your username or password by typing in the required details.</li>
+                <li>You may delete you account by clickign the "Delete My Account" button on the bottom.</li>
+            </ol>
+        </section>
+        <hr>
+        <section>
+            <h2>Logging Out</h2>
+            <p>When you're finished, remember to log out:</p>
+            <ol>
+                <li>Click the "Logout" button in the navigation bar.</li>
+                <li>You will be redirected to the home page with all your information securely stored.</li>
+                <p><i>*Note: You don't need to worry about the safety of your information, all form of cache is prevented and no users can access your information after you log out</i></p>
+            </ol>
+        </section>
+        <hr>
     </main>
     {% include 'footer.html' %}
 </body>
