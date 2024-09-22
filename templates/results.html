@@ -11,11 +11,11 @@
     {% include 'navbar.html' %}
     <main>
         <h1>Session Solves</h1>
-        <button id="deleteButton" onclick="return confirm('Are you sure you want to delete your most recent solve?');">Delete Most Recent Solve</button>
-        <button id="deleteAllButton" onclick="return confirm('Are you sure you want to delete all of the solves in this session? THIS CHANGE WILL BE IRREVERSIBLE');">Delete All Solves</button>
+        <button id="deleteButton">Delete Most Recent Solve</button>
+        <button id="deleteAllButton">Delete All Solves</button>
         <button onclick="window.location.href='/sessions';">Sessions</button>
         <button onclick="window.location.href='/timer';">Timer</button>
-        <!-- Sorting Toggle -->
+
         <div>
             <label for="sort-by">Sort by:</label>
             <select id="sort-by" onchange="changeSort()">
@@ -53,25 +53,31 @@
 
     <script>
         document.getElementById("deleteButton").addEventListener("click", function() {
-            fetch("/delete_most_recent", { method: "POST" })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.reload();
-                    } else {
-                        alert("Failed to delete the most recent solve.");
-                    }
-                });
+            const userConfirmed = confirm('Are you sure you want to delete your most recent solve?');
+            if (userConfirmed) {
+                fetch("/delete_most_recent", { method: "POST" })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        } else {
+                            alert("Failed to delete the most recent solve.");
+                        }
+                    });
+            }
         });
 
         document.getElementById("deleteAllButton").addEventListener("click", function() {
-            fetch("/delete_all", { method: "POST" })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.reload();
-                    } else {
-                        alert("Failed to delete all solves.");
-                    }
-                });
+            const userConfirmed = confirm('Are you sure you want to delete all of the solves in this session? THIS CHANGE WILL BE IRREVERSIBLE');
+            if (userConfirmed) {
+                fetch("/delete_all", { method: "POST" })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        } else {
+                            alert("Failed to delete all solves.");
+                        }
+                    });
+            }
         });
 
         function changeSort() {
