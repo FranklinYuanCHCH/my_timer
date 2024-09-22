@@ -508,8 +508,24 @@ def solve_stats(solve_id):
         user_session_ids = {session[0] for session in user_sessions}
 
         if session_id in user_session_ids:
+            # Fetch the session name based on session_id
+            c.execute("SELECT sessionName FROM Sessions WHERE sessionID = ?", (session_id,))
+            session_name = c.fetchone()
+
+            if session_name:
+                session_name = session_name[0]
+            else:
+                session_name = "Unknown Session"
+
             solve_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(solve_date))
-            response = make_response(render_template("solve_stats.html", solve_id=solve_id, time=solve_time, date=solve_date, scramble=scramble))
+            response = make_response(render_template(
+                "solve_stats.html", 
+                solve_id=solve_id, 
+                time=solve_time, 
+                date=solve_date, 
+                scramble=scramble, 
+                session_name=session_name  # Passing the session name to the template
+            ))
         else:
             response = make_response(render_template('solve_stats.html', error_message="Sorry, you can't access this solve."))
 

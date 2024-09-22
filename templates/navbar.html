@@ -41,6 +41,14 @@
                 </a>
             </li>
 
+            <!-- Help button with the icon image -->
+            <li class="{% if request.path == url_for('guide') %}active{% endif %}">
+                <a href="/guide">
+                    <img src="/static/images/help.png" alt="Help Icon" class="nav-icon">
+                    Help
+                </a>
+            </li>
+
             {% if 'user_id' in session %}
                 <!-- Profile button with the icon image -->
                 <li class="{% if request.path == url_for('dashboard') %}active{% endif %} right-align">
