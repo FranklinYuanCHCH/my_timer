@@ -258,6 +258,17 @@ input:focus {
     text-align: center;
 }
 
+.centered-scramble {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    min-height: 200px; /* Increase the minimum height for larger scrambles */
+    margin: 20px 0; /* Optional: space around the scramble */
+    padding: 10px; /* Optional: padding for some spacing inside the box */
+    overflow: hidden; /* Prevents overflow but keeps the scramble within */
+    box-sizing: border-box; /* Ensures padding is included in the height */
+}
+
 /* Main content flex container */
 #main-content {
     display: flex;
