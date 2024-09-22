@@ -9,15 +9,16 @@
 <body>
     {% include 'navbar.html' %}
     <main class="login-style">  
-      <h1>Login</h1>
       {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
-          <div class="flash {{ messages[-1][0] }}">
-            {{ messages[-1][1] }} <!-- Display only the most recent message -->
-          </div>
-        {% endif %}
+      <div class="flash {{ messages[-1][0] }}">
+        {{ messages[-1][1] }} <!-- Display only the most recent message -->
+      </div>
+      {% endif %}
       {% endwith %}
       <div class="box">
+        <br>
+        <h1>Login</h1>
         <form method="POST" action="{{ url_for('login') }}">
             <label for="username">Username:</label>
             <input type="text" name="username" id="username" required>
@@ -28,6 +29,7 @@
             <button class="update-input" type="submit">Login</button>
         </form>
         <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a></p>
+        <br>
       </div>
     </main>
     {% include 'footer.html' %}

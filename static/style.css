@@ -71,6 +71,7 @@ main {
 
 .login-style {
     max-width: 500px; /* Optional: limit the width of the main content */
+    align-content: center;
 }
 
 #recent-solves-box {
