@@ -30,7 +30,6 @@ body {
     width: 80px;  /* Adjust the size as needed */
     height: 80px;
     vertical-align: middle;  /* Aligns the image vertically with the text */
-    margin-right: 0px;  /* Space between the icon and the text */
 }
 
 /* Optional: Customize other font sizes */
@@ -68,6 +67,10 @@ main {
     margin: 0 auto; /* Center the content */
     flex: 1; /* Allow main content to expand and fill available space */
     text-align: center; /* Center text */
+}
+
+.login-style {
+    max-width: 500px; /* Optional: limit the width of the main content */
 }
 
 #recent-solves-box {
@@ -119,7 +122,7 @@ button:hover {
     margin: 10px 0;
     cursor: pointer;
     display: inline-block;
-    width: 200px;
+    width: 300px;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
