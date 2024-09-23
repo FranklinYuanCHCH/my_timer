@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, session, jsonify, redirect, url_for, flash, make_response
+from flask import Flask, render_template, request, session, jsonify, redirect
+from flask import url_for, flash, make_response
 import bcrypt
 import sqlite3
 import time
@@ -8,8 +9,10 @@ app.secret_key = 'supersecretkey'
 
 
 # Create a response to control caching
+# To prevent the usage of back feature to access previous pages
 def prevent_cache(response):
-    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+    response.headers['Cache-Control'] = (
+        'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0')
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
     return response
@@ -25,17 +28,20 @@ def home():
     prevent_cache(response)
     return response
 
+
 @app.route("/guide")
 def guide():
     response = make_response(render_template("guide.html"))
     prevent_cache(response)
     return response
 
+
 @app.route("/about")
 def about():
     response = make_response(render_template("about.html"))
     prevent_cache(response)
     return response
+
 
 @app.route("/timer")
 def timer():
@@ -47,7 +53,8 @@ def timer():
         return redirect(url_for('sessions'))
 
     active_session_name = session.get('active_session_name')
-    response = make_response(render_template("timer.html", active_session_name=active_session_name))
+    response = make_response(render_template("timer.html",
+                                             active_session_name=active_session_name))
     prevent_cache(response)
     return response
 
@@ -150,15 +157,14 @@ def results():
     conn = connect_db()
     c = conn.cursor()
 
-    if sort_by == 'time':
-        c.execute("SELECT solveID, time, scramble FROM Solves WHERE sessionID = ? ORDER BY time", (session_id,))
-    elif sort_by == 'time_desc':
-        c.execute("SELECT solveID, time, scramble FROM Solves WHERE sessionID = ? ORDER BY time DESC", (session_id,))
-    elif sort_by == 'date_desc':
-        c.execute("SELECT solveID, time, scramble FROM Solves WHERE sessionID = ? ORDER BY date DESC", (session_id,))
-    else:
-        c.execute("SELECT solveID, time, scramble FROM Solves WHERE sessionID = ? ORDER BY date", (session_id,))
-
+    query = (
+        "SELECT solveID, time, scramble FROM Solves WHERE sessionID = ? ORDER BY {}"
+    ).format(
+        'time' if sort_by == 'time' else
+        'time DESC' if sort_by == 'time_desc' else
+        'date DESC' if sort_by == 'date_desc' else 'date'
+    )
+    c.execute(query, (session_id,))
     solves = c.fetchall()
     conn.close()
 
@@ -188,7 +194,8 @@ def delete_solve(solve_id):
 @app.route('/delete_most_recent', methods=["POST"])
 def delete_most_recent():
     if 'user_id' not in session or 'active_session_id' not in session:
-        response = jsonify({"status": "error", "message": "Not logged in or no active session"}), 403
+        response = jsonify({"status": "error",
+                            "message": "Not logged in or no active session"}), 403
         prevent_cache(response)
         return response
 
@@ -196,11 +203,14 @@ def delete_most_recent():
 
     conn = connect_db()
     c = conn.cursor()
-    c.execute("DELETE FROM Solves WHERE solveID = (SELECT solveID FROM Solves WHERE sessionID = ? ORDER BY date DESC LIMIT 1)", (session_id,))
+    c.execute("""DELETE FROM Solves WHERE solveID =
+              (SELECT solveID FROM Solves WHERE sessionID = ?
+              ORDER BY date DESC LIMIT 1)""", (session_id,))
     conn.commit()
     conn.close()
 
-    response = jsonify({"status": "success", "message": "Most recent solve deleted"})
+    response = jsonify({"status": "success",
+                        "message": "Most recent solve deleted"})
     prevent_cache(response)
     return response
 
@@ -252,7 +262,8 @@ def register():
                 flash('Username is already taken', 'danger')
             else:
                 hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-                c.execute("INSERT INTO Users (userName, password) VALUES (?, ?)", (username, hashed_password))
+                c.execute("INSERT INTO Users (userName, password) VALUES (?, ?)",
+                          (username, hashed_password))
                 conn.commit()
                 flash('You were successfully registered!', 'success')
                 conn.close()
@@ -299,7 +310,7 @@ def logout():
     session.pop('user_id', None)
     session.pop('active_session_id', None)  # Clear active session ID
     session.pop('active_session_name', None)  # Clear active session name
-    
+
     response = redirect(url_for('login'))
     flash('You were successfully logged out!', 'success')
     prevent_cache(response)
@@ -309,7 +320,7 @@ def logout():
 # Route for the sessions page after logging in
 @app.route('/sessions', methods=['GET', 'POST'])
 def sessions():
-    if 'user_id' not in session:
+    if 'user_id' not in session:  # If the user is not logged in, redirect them to the login page
         return redirect(url_for('login'))
 
     user_id = session['user_id']
@@ -356,9 +367,10 @@ def set_active_session(session_id):
     user_id = session['user_id']
     conn = connect_db()
     c = conn.cursor()
-    
+
     # Check if the session belongs to the logged-in user
-    c.execute("SELECT sessionName FROM Sessions WHERE sessionID = ? AND userID = ?", (session_id, user_id))
+    c.execute("""SELECT sessionName FROM Sessions
+              WHERE sessionID = ? AND userID = ?""", (session_id, user_id))
     session_data = c.fetchone()
 
     if session_data:
@@ -411,7 +423,9 @@ def dashboard():
                 if existing_user:
                     flash('Username is already taken.', 'danger')
                 else:
-                    c.execute("UPDATE Users SET userName = ? WHERE userID = ?", (new_username, user_id))
+                    c.execute("""
+                        UPDATE Users SET userName = ? WHERE userID = ?
+                    """, (new_username, user_id))
                     conn.commit()
                     flash('Username updated successfully', 'success')
 
@@ -438,12 +452,16 @@ def dashboard():
                     elif new_password != confirm_password:
                         flash('New passwords do not match', 'danger')
                     elif new_password == current_password:
-                        flash('Your new password must be different from your current password', 'danger')
+                        flash('Your new password must be different from your current password',
+                              'danger')
                     elif len(new_password) > 16:
                         flash('Your new password must not exceed 16 characters', 'danger')
                     else:
-                        hashed_new_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
-                        c.execute("UPDATE Users SET password = ? WHERE userID = ?", (hashed_new_password, user_id))
+                        hashed_new_password = bcrypt.hashpw(new_password.encode('utf-8'),
+                                                            bcrypt.gensalt())
+                        c.execute("""
+                            UPDATE Users SET password = ? WHERE userID = ?
+                        """, (hashed_new_password, user_id))
                         conn.commit()
                         flash('Password updated successfully', 'success')
 
@@ -468,7 +486,9 @@ def delete_account():
     c = conn.cursor()
 
     # Delete all solves for the user
-    c.execute("DELETE FROM Solves WHERE sessionID IN (SELECT sessionID FROM Sessions WHERE userID = ?)", (user_id,))
+    c.execute("""DELETE FROM Solves WHERE
+               sessionID IN (SELECT sessionID
+              FROM Sessions WHERE userID = ?)""", (user_id,))
 
     # Delete all sessions for the user
     c.execute("DELETE FROM Sessions WHERE userID = ?", (user_id,))
@@ -519,15 +539,18 @@ def solve_stats(solve_id):
 
             solve_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(solve_date))
             response = make_response(render_template(
-                "solve_stats.html", 
-                solve_id=solve_id, 
-                time=solve_time, 
-                date=solve_date, 
-                scramble=scramble, 
+                "solve_stats.html",
+                solve_id=solve_id,
+                time=solve_time,
+                date=solve_date,
+                scramble=scramble,
                 session_name=session_name  # Passing the session name to the template
             ))
         else:
-            response = make_response(render_template('solve_stats.html', error_message="Sorry, you can't access this solve."))
+            response = make_response(render_template(
+                'solve_stats.html',
+                error_message="Sorry, you can't access this solve."
+            ))
 
     else:
         response = make_response(render_template('404.html'), 404)
