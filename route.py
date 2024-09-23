@@ -7,21 +7,21 @@ import time
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 
-# Variables declaration
+# Maximum lengths for username, password, and session name
 USERNAME_MAX = 16
 PASSWORD_MAX = 16
 SESSION_NAME_MAX = 16
 
-# Create a response to control caching
-# To prevent the usage of back feature to access previous pages
+# Function to set response headers to prevent caching
 def prevent_cache(response):
+    # Prevents the browser from caching the response
     response.headers['Cache-Control'] = (
         'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0')
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
     return response
 
-
+# Connect to the SQLite database
 def connect_db():
     return sqlite3.connect('results.db')
 
@@ -113,7 +113,6 @@ def get_recent_solves():
     return response
 
 
-# Route for the results page
 @app.route('/results')
 def results():
     if 'user_id' not in session:
@@ -124,11 +123,13 @@ def results():
         return redirect(url_for('sessions'))
 
     session_id = session['active_session_id']
+    # Default sorting option
     sort_by = request.args.get('sort_by', 'date_desc')
 
     conn = connect_db()
     c = conn.cursor()
 
+    # Construct the query based on the sorting option   
     query = (
         "SELECT solveID, time, scramble FROM Solves WHERE sessionID = ? ORDER BY {}"
     ).format(
@@ -204,7 +205,6 @@ def delete_all():
     return response
 
 
-# Route for registeration of an account
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -212,16 +212,13 @@ def register():
         password = request.form['password'].strip()
         confirm_password = request.form['confirm_password'].strip()
 
-        # Check for empty fields
         if not username or not password or not confirm_password:
             flash('All fields must be filled out.', 'danger')
-        # Check if the passwords match
         elif password != confirm_password:
             flash('Passwords do not match', 'danger')
-        # Check if username or password exceeds 16 characters
-        elif len(username) > 16:
+        elif len(username) > USERNAME_MAX:
             flash('Username cannot exceed 16 characters.', 'danger')
-        elif len(password) > 16:
+        elif len(password) > PASSWORD_MAX:
             flash('Password cannot exceed 16 characters.', 'danger')
         else:
             conn = connect_db()
@@ -247,7 +244,6 @@ def register():
     return response
 
 
-# Route for logging into an account
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -275,7 +271,6 @@ def login():
     return response
 
 
-# Route for logging out of an account
 @app.route('/logout')
 def logout():
     # Remove user-related data from session
@@ -304,7 +299,7 @@ def sessions():
             session_name = request.form['session_name'].strip()
 
             # Check for input length
-            if len(session_name) > 16:
+            if len(session_name) > SESSION_NAME_MAX:
                 flash('Session name must not exceed 16 characters.', 'danger')
             elif not session_name:
                 flash('Session name must not be blank.', 'danger')
@@ -361,7 +356,7 @@ def set_active_session(session_id):
     return response
 
 
-# Route for the dashboard page of an user
+# Route for the dashboard (renamed to profile) page of an user
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if 'user_id' not in session:
@@ -379,12 +374,10 @@ def dashboard():
         if 'new_username' in request.form:
             new_username = request.form['new_username'].strip()
 
-            # Check if the new username is blank or exceeds 16 characters
             if not new_username:
                 flash('Username must not be blank.', 'danger')
-            elif len(new_username) > 16:
+            elif len(new_username) > USERNAME_MAX:
                 flash('Username must be 16 characters or less.', 'danger')
-            # Check if the new username is the same as the current username
             elif new_username == current_username:
                 flash('The new username must be different from the current username.', 'danger')
             else:
@@ -426,7 +419,7 @@ def dashboard():
                     elif new_password == current_password:
                         flash('Your new password must be different from your current password',
                               'danger')
-                    elif len(new_password) > 16:
+                    elif len(new_password) > PASSWORD_MAX:
                         flash('Your new password must not exceed 16 characters', 'danger')
                     else:
                         hashed_new_password = bcrypt.hashpw(new_password.encode('utf-8'),
