@@ -14,7 +14,7 @@
         {% if messages %}
         <ul class="flashes">
             {% for category, message in messages %}
-            <div class="flash {{ category }}">{{ message }}</div>
+            <div class="flash {{ category }}">{{ messages[-1][1] }}</div>  <!-- Only display the latest message -->
             {% endfor %}
         </ul>
         {% endif %}

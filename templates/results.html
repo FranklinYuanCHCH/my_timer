@@ -25,7 +25,15 @@
                 <option value="time" {% if sort_by == 'time' %}selected{% endif %}>Time (Fastest to Slowest)</option>
             </select>
         </div>
-        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul class="flashes">
+            {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ messages[-1][1] }}</div>  <!-- Only display the latest message -->
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
         {% if solves %}
         <ul>
             {% for solve in solves %}

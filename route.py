@@ -326,8 +326,16 @@ def sessions():
         # Deleting a specific session and all solves associated with it
         elif 'delete_session_id' in request.form:
             session_id = request.form['delete_session_id']
+
+            # Delete the session from the database
             c.execute("DELETE FROM Sessions WHERE sessionID = ?", (session_id,))
             conn.commit()
+
+            # Convert session_id to the same type as 'active_session_id' if needed
+            if str(session.get('active_session_id')) == str(session_id):
+                session.pop('active_session_id', None)
+                session.pop('active_session_name', None)
+
             flash('Session deleted successfully.', 'success')
 
     c.execute("SELECT sessionID, sessionName, isPinned FROM Sessions WHERE userID = ?",
