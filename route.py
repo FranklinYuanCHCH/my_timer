@@ -7,6 +7,10 @@ import time
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 
+# Variables declaration
+USERNAME_MAX = 16
+PASSWORD_MAX = 16
+SESSION_NAME_MAX = 16
 
 # Create a response to control caching
 # To prevent the usage of back feature to access previous pages
@@ -61,6 +65,7 @@ def timer():
 
 @app.route("/save_time", methods=["POST"])
 def save_time():
+    # Check if the user is logged in and has an active session; return error if not
     if 'user_id' not in session or 'active_session_id' not in session:
         return jsonify({"status": "error", "message": "Not logged in or no active session"}), 403
 
@@ -102,41 +107,8 @@ def get_recent_solves():
     recent_solves = c.fetchall()
     conn.close()
 
+    # Format the response with recent solve times
     response = jsonify({'solves': [{'time': solve[0]} for solve in recent_solves]})
-    prevent_cache(response)
-    return response
-
-
-# Route for fetching the current Ao5 of the session
-@app.route("/get_ao5")
-def get_ao5():
-    if 'user_id' not in session or 'active_session_id' not in session:
-        response = jsonify({'ao5': None})
-        prevent_cache(response)
-        return response
-
-    session_id = session['active_session_id']
-
-    conn = connect_db()
-    c = conn.cursor()
-    c.execute("""
-        SELECT time FROM Solves
-        WHERE sessionID = ?
-        ORDER BY date DESC
-        LIMIT 5
-    """, (session_id,))
-    recent_solves = c.fetchall()
-    conn.close()
-
-    if len(recent_solves) < 5:
-        response = jsonify({'ao5': None})
-        prevent_cache(response)
-        return response
-
-    times = [solve[0] for solve in recent_solves]
-    ao5 = sum(times) / len(times)
-
-    response = jsonify({'ao5': ao5})
     prevent_cache(response)
     return response
 
