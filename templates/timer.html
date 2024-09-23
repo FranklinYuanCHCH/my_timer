@@ -16,30 +16,25 @@
 <body>
     {% include 'navbar.html' %}
     <main>
-        <!-- Flex container for timer and right-side content -->
         <div id="main-content">
             <div id="left-side-content">
-                <!-- Scramble display container -->
                 <div id="scramble-container">
                     <div id="scramble-box">
                         <div id="scramble"></div>
-                        <!-- Fixed-size scramble display box -->
                         <div id="scramble-display-container" title="If the scramble is not here, refresh this page or check your network condition.">
                             <scramble-display id="scramble-display"></scramble-display>
-                        </div>
-                    </div>
-                </div>
+                        </div>  <!-- scramble-display-container -->
+                    </div>  <!-- scramble-box -->
+                </div>  <!-- scramble-container -->
                 
-                <!-- Timer below scramble display -->
                 <div class="timer" id="timer">0.000</div>
                 <button id="delete-recent-solve" class="btn btn-danger">Delete Most Recent Solve</button>
                 <div class="box" id="hint">
                     <p>Hint: Press and release the Space Bar to start, stop, and reset the timer.<br>Draw scramble may take a bit to load depending on your internet conditions.</p>
-                </div>
-            </div>
+                </div>  <!-- box -->
+            </div>  <!-- left-side-content -->
 
             <div id="right-side-content">
-                <!-- Active session box -->
                 <div class="box" id="active-session-box">
                     {% if session['active_session_id'] %}
                         <h3>Current Session:</h3>
@@ -47,13 +42,12 @@
                     {% else %}
                         <p>No active session. Please select a session.</p>
                     {% endif %}
-                </div>
+                </div>  <!-- box -->
 
                 <div class="box" id="ao5-box" title="AO5 stands for average of 5. It is calculated by removing the fastest and the slowest solve in 5 solves and calculate the mean of the rest of the solves">
                     <h3>Current AO5:</h3>
                     <p id="ao5"><i>#N/A</i></p>
-                </div>
-                <!-- Recent solves box -->
+                </div>  <!-- ao5-box -->
                 <div class="box" id="recent-solves-box">
                     <h3>Most Recent 5 Solves:</h3>
                     <table id="solves-table">
@@ -61,9 +55,9 @@
                             <!-- Recent solves will be inserted here by JavaScript -->
                         </tbody>
                     </table>
-                </div>
-            </div>
-        </div>
+                </div>  <!-- recent-solve-box -->
+            </div>  <!-- right-side-container -->
+        </div>  <!-- main-content -->
 
         <script src="/static/timer.js"></script>
     </main>

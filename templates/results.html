@@ -34,14 +34,14 @@
                         <a href="{{ url_for('solve_stats', solve_id=solve[0]) }}">
                             {{ (solve[1] / 1000) | round(3) }}
                         </a>
-                    </div>
+                    </div>  <!-- time-box -->
                     <div class="scramble-box">
                         {{ solve[2] }}
-                    </div>
+                    </div>  <!-- scramble-box -->
                     <div class="stats-button">
                         <a href="{{ url_for('solve_stats', solve_id=solve[0]) }}">See Stats</a>
-                    </div>
-                </div>
+                    </div>  <!-- stats-button -->
+                </div>  <!-- solve-container -->
             {% endfor %}
         </ul>
         {% else %}
