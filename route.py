@@ -225,9 +225,9 @@ def register():
         elif password != confirm_password:
             flash('Passwords do not match', 'danger')
         elif len(username) > USERNAME_MAX:
-            flash('Username cannot exceed 16 characters.', 'danger')
+            flash('Username cannot exceed ' + str(USERNAME_MAX) + ' characters.', 'danger')
         elif len(password) > PASSWORD_MAX:
-            flash('Password cannot exceed 16 characters.', 'danger')
+            flash('Password cannot exceed ' + str(PASSWORD_MAX) + ' characters.', 'danger')
         else:
             conn = connect_db()
             c = conn.cursor()
@@ -312,7 +312,7 @@ def sessions():
         if 'session_name' in request.form:
             session_name = request.form['session_name'].strip()
             if len(session_name) > SESSION_NAME_MAX:
-                flash('Session name must not exceed 16 characters.', 'danger')
+                flash('Session name must not exceed ' + str(SESSION_NAME_MAX) + ' characters.', 'danger')
             elif not session_name:
                 flash('Session name must not be blank.', 'danger')
             else:
@@ -392,7 +392,7 @@ def dashboard():
             if not new_username:
                 flash('Username must not be blank.', 'danger')
             elif len(new_username) > USERNAME_MAX:
-                flash('Username must be 16 characters or less.', 'danger')
+                flash('Username must be ' + str(USERNAME_MAX) + ' characters or less.', 'danger')
             elif new_username == current_username:
                 flash('The new username must be different from the current username.', 'danger')
             else:
@@ -437,7 +437,7 @@ def dashboard():
                         flash('Your new password must be different from your current password',
                               'danger')
                     elif len(new_password) > PASSWORD_MAX:
-                        flash('Your new password must not exceed 16 characters', 'danger')
+                        flash('Your new password must not exceed ' + str(PASSWORD_MAX) + ' characters', 'danger')
                     else:
                         # Hash the new password and update it in the database
                         hashed_new_password = bcrypt.hashpw(new_password.encode('utf-8'),
