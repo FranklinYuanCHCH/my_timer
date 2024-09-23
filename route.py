@@ -7,19 +7,20 @@ import time
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 
-# Maximum lengths for username, password, and session name
+# Use constants for maximum lengths for username, password, and session name
 USERNAME_MAX = 16
 PASSWORD_MAX = 16
 SESSION_NAME_MAX = 16
 
 # Function to set response headers to prevent caching
+# Prevents the browser from accessing previous pages using the back function
 def prevent_cache(response):
-    # Prevents the browser from caching the response
     response.headers['Cache-Control'] = (
         'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0')
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
     return response
+
 
 # Connect to the SQLite database
 def connect_db():
@@ -69,6 +70,7 @@ def save_time():
     if 'user_id' not in session or 'active_session_id' not in session:
         return jsonify({"status": "error", "message": "Not logged in or no active session"}), 403
 
+    # Retrieve the solve time and scramble data from the request
     data = request.get_json()
     solve_time = data["time"]
     scramble = data["scramble"]
@@ -96,6 +98,7 @@ def get_recent_solves():
 
     session_id = session['active_session_id']
 
+    # Fetch the most recent solve times for the active session, limited to 5
     conn = connect_db()
     c = conn.cursor()
     c.execute("""
@@ -123,7 +126,7 @@ def results():
         return redirect(url_for('sessions'))
 
     session_id = session['active_session_id']
-    # Default sorting option
+    # Set default sorting option
     sort_by = request.args.get('sort_by', 'date_desc')
 
     conn = connect_db()
@@ -166,6 +169,7 @@ def delete_solve(solve_id):
 # Route for deleting the most recent solve of the session
 @app.route('/delete_most_recent', methods=["POST"])
 def delete_most_recent():
+    # Ensure the user is logged in and has an active session; return error if not
     if 'user_id' not in session or 'active_session_id' not in session:
         response = jsonify({"status": "error",
                             "message": "Not logged in or no active session"}), 403
@@ -176,12 +180,14 @@ def delete_most_recent():
 
     conn = connect_db()
     c = conn.cursor()
+    # Delete the most recent solve from the Solves table for the active session
     c.execute("""DELETE FROM Solves WHERE solveID =
               (SELECT solveID FROM Solves WHERE sessionID = ?
               ORDER BY date DESC LIMIT 1)""", (session_id,))
     conn.commit()
     conn.close()
 
+    # Return a success message confirming the deletion
     response = jsonify({"status": "success",
                         "message": "Most recent solve deleted"})
     prevent_cache(response)
@@ -208,10 +214,12 @@ def delete_all():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
+        # Retrieve and strip input values from the registration form
         username = request.form['username'].strip()
         password = request.form['password'].strip()
         confirm_password = request.form['confirm_password'].strip()
 
+        # Validate input fields and provide feedback
         if not username or not password or not confirm_password:
             flash('All fields must be filled out.', 'danger')
         elif password != confirm_password:
@@ -223,6 +231,7 @@ def register():
         else:
             conn = connect_db()
             c = conn.cursor()
+            # Check if the username is already taken
             c.execute("SELECT userName FROM Users WHERE userName = ?", (username,))
             existing_user = c.fetchone()
 
@@ -230,6 +239,7 @@ def register():
             if existing_user:
                 flash('Username is already taken', 'danger')
             else:
+                # Hash the password before storing it for security
                 hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
                 c.execute("INSERT INTO Users (userName, password) VALUES (?, ?)",
                           (username, hashed_password))
@@ -247,6 +257,7 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
+        # Retrieve and strip input values from the login form
         username = request.form['username'].strip()
         password = request.form['password'].strip()
 
@@ -259,6 +270,7 @@ def login():
             user = c.fetchone()
             conn.close()
 
+            # Check if the user exists and verify the password
             if user and bcrypt.checkpw(password.encode('utf-8'), user[1]):
                 session['user_id'] = user[0]
                 flash('You were successfully logged in!', 'success')
@@ -273,10 +285,10 @@ def login():
 
 @app.route('/logout')
 def logout():
-    # Remove user-related data from session
+    # Clear all the user related data
     session.pop('user_id', None)
-    session.pop('active_session_id', None)  # Clear active session ID
-    session.pop('active_session_name', None)  # Clear active session name
+    session.pop('active_session_id', None)
+    session.pop('active_session_name', None)
 
     response = redirect(url_for('login'))
     flash('You were successfully logged out!', 'success')
@@ -287,7 +299,8 @@ def logout():
 # Route for the sessions page after logging in
 @app.route('/sessions', methods=['GET', 'POST'])
 def sessions():
-    if 'user_id' not in session:  # If the user is not logged in, redirect them to the login page
+    # If the user is not logged in, redirect them to the login page
+    if 'user_id' not in session:
         return redirect(url_for('login'))
 
     user_id = session['user_id']
@@ -295,10 +308,9 @@ def sessions():
     c = conn.cursor()
 
     if request.method == 'POST':
+        # Handling session creation
         if 'session_name' in request.form:
             session_name = request.form['session_name'].strip()
-
-            # Check for input length
             if len(session_name) > SESSION_NAME_MAX:
                 flash('Session name must not exceed 16 characters.', 'danger')
             elif not session_name:
@@ -308,6 +320,7 @@ def sessions():
                           (session_name, 0, user_id))
                 conn.commit()
                 flash('Session created successfully.', 'success')
+
         # Deleting a specific session and all solves associated with it
         elif 'delete_session_id' in request.form:
             session_id = request.form['delete_session_id']
@@ -356,7 +369,7 @@ def set_active_session(session_id):
     return response
 
 
-# Route for the dashboard (renamed to profile) page of an user
+# Route for the dashboard (renamed to profile) page
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if 'user_id' not in session:
@@ -366,14 +379,16 @@ def dashboard():
     conn = connect_db()
     c = conn.cursor()
 
-    # Retrieve the current username
+    # Retrieve the current username for display and updating
     c.execute("SELECT userName FROM Users WHERE userID = ?", (user_id,))
     current_username = c.fetchone()[0]
 
     if request.method == 'POST':
+        # Handle username change
         if 'new_username' in request.form:
             new_username = request.form['new_username'].strip()
 
+            # Validate new username input
             if not new_username:
                 flash('Username must not be blank.', 'danger')
             elif len(new_username) > USERNAME_MAX:
@@ -394,6 +409,7 @@ def dashboard():
                     conn.commit()
                     flash('Username updated successfully', 'success')
 
+        # Handle password change
         if 'current_password' in request.form:
             current_password = request.form['current_password'].strip()
             new_password = request.form['new_password'].strip()
@@ -403,6 +419,7 @@ def dashboard():
             if not current_password or not new_password or not confirm_password:
                 flash('All password fields must be filled out.', 'danger')
             else:
+                # Retrieve the stored password for verification
                 c.execute("SELECT password FROM Users WHERE userID = ?", (user_id,))
                 stored_password = c.fetchone()
 
@@ -411,7 +428,7 @@ def dashboard():
                 else:
                     stored_password = stored_password[0]
 
-                    # Validate current password, new password, and confirm password
+                    # Validate the current password and the new password criteria
                     if not bcrypt.checkpw(current_password.encode('utf-8'), stored_password):
                         flash('Current password is incorrect', 'danger')
                     elif new_password != confirm_password:
@@ -422,6 +439,7 @@ def dashboard():
                     elif len(new_password) > PASSWORD_MAX:
                         flash('Your new password must not exceed 16 characters', 'danger')
                     else:
+                        # Hash the new password and update it in the database
                         hashed_new_password = bcrypt.hashpw(new_password.encode('utf-8'),
                                                             bcrypt.gensalt())
                         c.execute("""
@@ -430,7 +448,7 @@ def dashboard():
                         conn.commit()
                         flash('Password updated successfully', 'success')
 
-    # Pass current username to the template for display
+    # Fetch user info for display on the profile
     c.execute("SELECT userName FROM Users WHERE userID = ?", (user_id,))
     user_info = c.fetchone()
     conn.close()
@@ -440,7 +458,6 @@ def dashboard():
     return response
 
 
-# Route for permanently deleting an account and all sessions and solves associated with it
 @app.route('/delete_account', methods=['POST'])
 def delete_account():
     if 'user_id' not in session:
@@ -480,14 +497,14 @@ def solve_stats(solve_id):
     conn = connect_db()
     c = conn.cursor()
 
-    # Fetch solve and associated sessionID
+    # Fetch solve and details associated sessionID
     c.execute("SELECT time, date, scramble, sessionID FROM Solves WHERE solveID = ?", (solve_id,))
     solve = c.fetchone()
 
     if solve:
         solve_time, solve_date, scramble, session_id = solve
 
-        # Check if the sessionID is in the user's sessions
+        # Fetch the user's sessions to check if the solve's sessionID belongs to them
         c.execute("SELECT sessionID FROM Sessions WHERE userID = ?", (user_id,))
         user_sessions = c.fetchall()
         user_session_ids = {session[0] for session in user_sessions}
@@ -512,12 +529,14 @@ def solve_stats(solve_id):
                 session_name=session_name  # Passing the session name to the template
             ))
         else:
+            # Render error message if the user does not have access to the solve
             response = make_response(render_template(
                 'solve_stats.html',
                 error_message="Sorry, you can't access this solve."
             ))
 
     else:
+        # Render a 404 page if the solve is not found
         response = make_response(render_template('404.html'), 404)
 
     prevent_cache(response)
