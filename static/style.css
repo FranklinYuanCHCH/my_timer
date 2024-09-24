@@ -1,11 +1,12 @@
-/* General body styles */
+/* General styles */
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
     background-color: #f0f0f0;
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Ensures body takes full viewport height */
+    min-height: 100vh;
+    font-family: 'Lexend', sans-serif;
+    font-size: 18px;
 }
 
 /* Prevent scrolling class */
@@ -13,23 +14,18 @@ body {
     overflow: hidden;
 }
 
-body {
-    font-family: 'Lexend', sans-serif;
-    font-size: 18px; /* Adjust this as needed */
-}
-
-/* Style for the navigation icon next to Home */
+/* Stlle for navbar */
 .nav-icon {
-    width: 20px;  /* Adjust the size as needed */
+    width: 20px;
     height: 20px;
-    vertical-align: middle;  /* Aligns the image vertically with the text */
-    margin-right: 8px;  /* Space between the icon and the text */
+    vertical-align: middle;
+    margin-right: 8px;
 }
 
 .home-logo {
-    width: 80px;  /* Adjust the size as needed */
+    width: 80px;
     height: 80px;
-    vertical-align: middle;  /* Aligns the image vertically with the text */
+    vertical-align: middle;
 }
 
 /* Optional: Customize other font sizes */
@@ -41,47 +37,47 @@ h1, h2, h3, h4, h5, h6, button, .scramble-box {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Set the height to the full viewport height */
-    text-align: center; /* Center the text horizontally */
-    flex-direction: column; /* Stack the elements vertically */
+    height: 100vh;
+    text-align: center;
+    flex-direction: column;
 }
 
 /* Optional styling for the links */
 #home-content a {
-    margin-top: 10px; /* Add space between the links */
-    text-decoration: none; /* Remove underline */
-    color: #007BFF; /* Link color */
+    margin-top: 10px;
+    text-decoration: none;
+    color: #007BFF;
 }
 
 #home-content a:hover {
-    text-decoration: underline; /* Add underline on hover */
+    text-decoration: underline;
 }
 
 /* Main content area */
 main {
-    padding-top: 60px; /* Height of the navbar */
-    padding-bottom: 90px; /* Height of the footer */
+    padding-top: 60px;
+    padding-bottom: 90px;
     box-sizing: border-box;
     width: 100%;
-    max-width: 1200px; /* Optional: limit the width of the main content */
-    margin: 0 auto; /* Center the content */
-    flex: 1; /* Allow main content to expand and fill available space */
-    text-align: center; /* Center text */
+    max-width: 1200px;
+    margin: 0 auto;
+    flex: 1;
+    text-align: center;
 }
 
 .login-style {
-    max-width: 500px; /* Optional: limit the width of the main content */
+    max-width: 500px;
     align-content: center;
 }
 
 #recent-solves-box {
-    text-align: center; /* Center content in the recent solves box */
+    text-align: center; 
 }
 
 #solves-table {
     width: 100%;
-    border-collapse: collapse; /* Collapse table borders */
-    margin: 0 auto; /* Center the table */
+    border-collapse: collapse;
+    margin: 0 auto; 
     margin-bottom: 10px;
 }
 
@@ -95,7 +91,7 @@ main {
 
 /* Active session box and AO5 box styles */
 #active-session-box, #ao5-box {
-    text-align: center; /* Center text in these boxes */
+    text-align: center; 
 }
 
 /* Button styling */
@@ -113,7 +109,7 @@ button {
 button:hover {
     background-color: #d0d0d0;
     border: 1px solid #a2a2a2;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Slightly more pronounced shadow */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 /* Session button styling */
@@ -156,17 +152,17 @@ button[type="submit"][onclick*="confirm"] {
 }
 
 button[type="submit"][onclick*="confirm"]:hover {
-    background-color: #d32f2f; /* Darker red on hover */
+    background-color: #d32f2f;
 }
 
 /* Form styles */
 form {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center form elements horizontally */
-    max-width: 400px; /* Set a max width for the form */
-    margin: 0 auto; /* Center the form horizontally */
-    padding: 20px; /* Add padding inside the form */
+    align-items: center; 
+    max-width: 400px; 
+    margin: 0 auto; 
+    padding: 20px; 
 }
 
 /* Form labels */
@@ -174,23 +170,22 @@ form label {
     margin-bottom: 5px;
     font-weight: bold;
     text-align: left;
-    width: 100%; /* Make labels full width */
+    width: 100%; 
 }
 
 /* Form input boxes */
 form input[type="text"], form input[type="password"] {
-    width: 100%; /* Full width of the form */
-    max-width: 300px; /* Max width of input boxes */
-    margin-bottom: 15px; /* Space between input boxes */
+    width: 100%; 
+    max-width: 300px; 
+    margin-bottom: 15px; 
 }
 
 /* Form buttons */
 form button {
-    width: 100%; /* Full width of the form */
-    max-width: 300px; /* Max width of buttons */
-    padding: 10px; /* Add padding inside buttons */
+    width: 100%; 
+    max-width: 300px; 
+    padding: 10px; 
 }
-
 
 input{
     background-color: #ffffff;
@@ -242,8 +237,8 @@ input:focus {
 }
 
 #scramble-display-container {
-    width: 400px; /* Fixed width */
-    height: 300px; /* Fixed height */
+    width: 400px;
+    height: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -264,26 +259,26 @@ input:focus {
 
 .centered-scramble {
     display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    min-height: 200px; /* Increase the minimum height for larger scrambles */
-    margin: 20px 0; /* Optional: space around the scramble */
-    padding: 10px; /* Optional: padding for some spacing inside the box */
-    overflow: hidden; /* Prevents overflow but keeps the scramble within */
-    box-sizing: border-box; /* Ensures padding is included in the height */
+    justify-content: center; 
+    align-items: center; 
+    min-height: 200px; 
+    margin: 20px 0; 
+    padding: 10px; 
+    overflow: hidden; 
+    box-sizing: border-box; 
 }
 
 /* Main content flex container */
 #main-content {
     display: flex;
-    justify-content: space-between; /* Align left and right content */
-    align-items: flex-start; /* Align items to the top */
-    flex: 1; /* Ensure it takes up available space */
+    justify-content: space-between; 
+    align-items: flex-start; 
+    flex: 1; 
 }
 
 /* Left-side content styles */
 #left-side-content {
-    max-width: 60%; /* Allow more space for the timer and scramble */
+    max-width: 60%; 
 }
 
 .timer {
@@ -294,12 +289,12 @@ input:focus {
 
 /* Right-side content styles */
 #right-side-content {
-    max-width: 300px; /* Set a max-width for the right-side content */
-    margin-left: 20px; /* Add some space between the left and right content */
+    max-width: 300px; 
+    margin-left: 20px; 
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Vertically center the content */
-    height: 100vh; /* Set the height to fill the viewport */
+    justify-content: center; 
+    height: 100vh; 
 }
 
 #scramble {
@@ -319,11 +314,11 @@ select {
     padding: 8px;
     font-size: 16px;
     color: #495057;
-    appearance: none; /* Remove the default arrow */
+    appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
     width: 100%;
-    max-width: 200px; /* Adjust width as needed */
+    max-width: 200px;
     margin-top: 10px;
     margin-bottom: 10px;
     cursor: pointer;
@@ -352,9 +347,9 @@ select:focus {
     min-width: 100px;
     text-align: center;
     font-size: 20px;
-    text-decoration: none; /* Remove underline from the link */
+    text-decoration: none;
     color: black;
-    display: inline-block; /* Ensure padding is applied properly */
+    display: inline-block;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -370,10 +365,10 @@ select:focus {
     border-radius: 8px;
     padding: 10px 15px;
     margin-right: 10px;
-    flex: 1; /* Flex-grow to take up remaining space */
+    flex: 1;
     font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
     font-size: 16px;
-    word-break: break-word; /* Handle long scrambles */
+    word-break: break-word;
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
@@ -392,12 +387,12 @@ select:focus {
     text-decoration: none;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
-    display: inline-block; /* Ensure padding is applied properly */
+    display: inline-block;
 }
 
 .stats-button a:hover {
     background-color: #0056b3;
-    transform: scale(1.05); /* Slight scale effect on hover */
+    transform: scale(1.05);
 }
 
 /* Navbar styles */
@@ -407,15 +402,15 @@ nav {
     top: 0;
     left: 0;
     width: 100%;
-    height: 60px; /* Height of the navbar */
-    z-index: 1000; /* Ensures the navbar is on top of other content */
+    height: 60px;
+    z-index: 1000;
     display: flex;
-    align-items: center; /* Center content vertically in the navbar */
+    align-items: center;
     transition: background-color 0.3s ease;
 }
 
 nav:hover {
-    background-color: #444; /* Darker background on hover */
+    background-color: #444;
 }
 
 /* Navbar list styles */
@@ -425,7 +420,7 @@ nav ul {
     padding: 0;
     overflow: hidden;
     background-color: #333;
-    width: 100%; /* Full width of the navbar */
+    width: 100%;
 }
 
 nav ul li {
@@ -434,7 +429,7 @@ nav ul li {
 
 /* Right-align specific list items */
 nav ul li.right-align {
-    float: right; /* Align to the right */
+    float: right;
 }
 
 /* Navbar link styles */
@@ -453,13 +448,13 @@ nav ul li a:hover {
 
 /* Active link styles */
 nav ul li.active a {
-    background-color: #007bff; /* Change the background color */
-    color: #fff; /* Change the text color */
+    background-color: #007bff;
+    color: #fff;
 }
 
 nav ul li.active a:hover {
-    background-color: #0050a5; /* Change the background color */
-    color: #fff; /* Change the text color */
+    background-color: #0050a5;
+    color: #fff;
 }
 
 /* Footer styles */
@@ -472,19 +467,19 @@ footer {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 50px; /* Height of the footer */
-    z-index: 1000; /* Ensures the footer is on top of other content */
+    height: 50px;
+    z-index: 1000;
 }
 
 .footer-link {
-    color: rgb(181, 205, 255); /* Default link color */
-    text-decoration: none; /* Remove underline */
-    transition: color 0.3s ease; /* Smooth color transition */
+    color: rgb(181, 205, 255); 
+    text-decoration: none; 
+    transition: color 0.3s ease; 
 }
 
 /* Visited state to ensure color remains the same */
 .footer-link:visited {
-    color: rgb(181, 205, 255); /* Keep the color consistent after visiting */
+    color: rgb(181, 205, 255); 
 }
 
 /* Footer content styles */
