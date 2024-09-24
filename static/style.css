@@ -9,50 +9,6 @@ body {
     font-size: 18px;
 }
 
-/* Prevent scrolling class */
-.no-scroll {
-    overflow: hidden;
-}
-
-/* Stlle for navbar */
-.nav-icon {
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
-    margin-right: 8px;
-}
-
-.home-logo {
-    width: 80px;
-    height: 80px;
-    vertical-align: middle;
-}
-
-/* Optional: Customize other font sizes */
-h1, h2, h3, h4, h5, h6, button, .scramble-box {
-    font-family: 'Lexend', sans-serif;
-}
-
-#home-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    text-align: center;
-    flex-direction: column;
-}
-
-/* Optional styling for the links */
-#home-content a {
-    margin-top: 10px;
-    text-decoration: none;
-    color: #007BFF;
-}
-
-#home-content a:hover {
-    text-decoration: underline;
-}
-
 /* Main content area */
 main {
     padding-top: 60px;
@@ -65,11 +21,51 @@ main {
     text-align: center;
 }
 
+h1, h2, h3, h4, h5, h6, button, .scramble-box {
+    font-family: 'Lexend', sans-serif;
+}
+
+/* Prevent scrolling class */
+.no-scroll {
+    overflow: hidden;
+}
+
+
+/* Home page styles */
+.home-logo {
+    width: 80px;
+    height: 80px;
+    vertical-align: middle;
+}
+
+#home-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    flex-direction: column;
+}
+
+#home-content a {
+    margin-top: 10px;
+    text-decoration: none;
+    color: #007BFF;
+}
+
+#home-content a:hover {
+    text-decoration: underline;
+}
+
+
+/* Style for login section */
 .login-style {
     max-width: 500px;
     align-content: center;
 }
 
+
+/* Style for timer page elements */
 #recent-solves-box {
     text-align: center; 
 }
@@ -93,6 +89,7 @@ main {
 #active-session-box, #ao5-box {
     text-align: center; 
 }
+
 
 /* Button styling */
 button {
@@ -154,6 +151,7 @@ button[type="submit"][onclick*="confirm"] {
 button[type="submit"][onclick*="confirm"]:hover {
     background-color: #d32f2f;
 }
+
 
 /* Form styles */
 form {
@@ -395,6 +393,7 @@ select:focus {
     transform: scale(1.05);
 }
 
+
 /* Navbar styles */
 nav {
     background-color: #333;
@@ -407,6 +406,13 @@ nav {
     display: flex;
     align-items: center;
     transition: background-color 0.3s ease;
+}
+
+.nav-icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 8px;
 }
 
 nav:hover {
@@ -457,6 +463,7 @@ nav ul li.active a:hover {
     color: #fff;
 }
 
+
 /* Footer styles */
 footer {
     background-color: #333;
@@ -491,6 +498,7 @@ footer {
     margin: 0 auto;
     padding: 0 20px;
 }
+
 
 /* Flash message styles */
 .flash {
