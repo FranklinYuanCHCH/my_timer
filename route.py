@@ -14,7 +14,7 @@ SESSION_NAME_MAX = 16
 
 
 # Function to set response headers to prevent caching
-# Prevents the browser from accessing previous pages using the back function
+# Prevents the browser from accessing previous pages using the back feature
 def prevent_cache(response):
     response.headers['Cache-Control'] = (
         'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0')
@@ -326,6 +326,9 @@ def sessions():
         # Deleting a specific session and all solves associated with it
         elif 'delete_session_id' in request.form:
             session_id = request.form['delete_session_id']
+
+            # Delete all the solves in that session
+            c.execute('DELETE FROM Solves WHERE sessionID = ?', (session_id,))
 
             # Delete the session from the database
             c.execute("DELETE FROM Sessions WHERE sessionID = ?", (session_id,))
